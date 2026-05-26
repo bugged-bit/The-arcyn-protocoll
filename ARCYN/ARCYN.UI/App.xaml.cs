@@ -66,11 +66,65 @@ public partial class App : Application
             System.Console.WriteLine(path ?? "No config found");
             return;
         }
-        if (cliArgs.Contains("--setup"))
+if (cliArgs.Contains("--setup"))
+{
+    RunCliSetup();
+    return;
+}
+
+// Import config
+if (cliArgs.Contains("--import"))
+{
+    var idx = Array.IndexOf(cliArgs, "--import");
+    if (idx + 1 >= cliArgs.Length)
+    {
+        System.Console.WriteLine("--import requires a file path");
+        return;
+    }
+    var importPath = cliArgs[idx + 1];
+    try
+    {
+        var json = System.IO.File.ReadAllText(importPath);
+        var config = System.Text.Json.JsonSerializer.Deserialize<ARCYN.UI.Models.ArcynConfig>(json, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        if (config != null)
         {
-            RunCliSetup();
-            return;
+            new ConfigService().Save(config);
+            System.Console.WriteLine($"Config imported from {importPath}");
         }
+        else
+        {
+            System.Console.WriteLine("Failed to parse config file");
+        }
+    }
+    catch (Exception ex)
+    {
+        System.Console.WriteLine($"Import error: {ex.Message}");
+    }
+    return;
+}
+
+// Export config
+if (cliArgs.Contains("--export"))
+{
+    var idx = Array.IndexOf(cliArgs, "--export");
+    if (idx + 1 >= cliArgs.Length)
+    {
+        System.Console.WriteLine("--export requires a file path");
+        return;
+    }
+    var exportPath = cliArgs[idx + 1];
+    var cfg = new ConfigService();
+    var current = cfg.Load();
+    if (current == null)
+    {
+        System.Console.WriteLine("No configuration to export");
+        return;
+    }
+    var json = System.Text.Json.JsonSerializer.Serialize(current, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+    System.IO.File.WriteAllText(exportPath, json);
+    System.Console.WriteLine($"Config exported to {exportPath}");
+    return;
+}
 
         // Detect first-run: no config exists
         try
@@ -108,11 +162,13 @@ public partial class App : Application
         System.Console.WriteLine();
         System.Console.WriteLine("Usage: ARCYN [options]");
         System.Console.WriteLine();
-        System.Console.WriteLine("Options:");
-        System.Console.WriteLine("  --help         Show this help");
-        System.Console.WriteLine("  --version      Show version info");
-        System.Console.WriteLine("  --config-path  Show resolved config path");
-        System.Console.WriteLine("  --setup        Run CLI setup wizard");
+System.Console.WriteLine("Options:");
+System.Console.WriteLine("  --help         Show this help");
+System.Console.WriteLine("  --version      Show version info");
+System.Console.WriteLine("  --config-path  Show resolved config path");
+System.Console.WriteLine("  --setup        Run CLI setup wizard");
+System.Console.WriteLine("  --import <path>  Import config file");
+System.Console.WriteLine("  --export <path>  Export current config");
     }
 
     private static void RunCliSetup()
