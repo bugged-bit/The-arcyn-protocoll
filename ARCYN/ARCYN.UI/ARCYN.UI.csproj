@@ -13,7 +13,7 @@
     <ApplicationIcon />
     <StartupObject>ARCYN.UI.App</StartupObject>
     <AssemblyName>ARCYN</AssemblyName>
-    <Version>1.5.0</Version>
+    <Version>1.5.1</Version>
     <RootNamespace>ARCYN.UI</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
