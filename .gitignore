@@ -15,6 +15,10 @@ ARCYN.deps.json
 ARCYN.runtimeconfig.json
 publish/
 ARCYN/ARCYN.exe
+ARCYN/**/*.dll
+ARCYN/**/*.pdb
+ARCYN/**/*.deps.json
+ARCYN/**/*.runtimeconfig.json
 ARCYN/arcyn_launch.log
 session.md
 vroken.md
