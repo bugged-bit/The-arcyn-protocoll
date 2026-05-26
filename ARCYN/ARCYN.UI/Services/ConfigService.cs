@@ -152,7 +152,11 @@ public sealed class ConfigService
             // Sanitize app entries – trim whitespace, remove empty entries
             mode.Apps = mode.Apps.Select(a => a.Trim()).Where(a => !string.IsNullOrWhiteSpace(a)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
             // Sanitize folder entries – keep only existing directories
-            mode.Folders = mode.Folders.Select(f => f.Trim()).Where(f => Directory.Exists(f)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+            mode.Folders = mode.Folders
+    .Select(f => Environment.ExpandEnvironmentVariables(f.Trim()))
+    .Where(f => Directory.Exists(f))
+    .Distinct(StringComparer.OrdinalIgnoreCase)
+    .ToList();
             // Sanitize website entries – keep only well‑formed http/https URLs
             mode.Websites = mode.Websites.Select(u => u.Trim()).Where(u =>
             {

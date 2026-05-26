@@ -50,6 +50,7 @@ public partial class App : Application
         if (cliArgs.Contains("--help"))
         {
             ShowHelp();
+            Current.Shutdown(0);
             return;
         }
         if (cliArgs.Contains("--version"))
@@ -57,15 +58,40 @@ public partial class App : Application
             System.Console.WriteLine("ARCYN v1.0.0");
             System.Console.WriteLine("Tactical workspace launcher");
             System.Console.WriteLine("MIT License - https://github.com/bugged-bit/ARCYN");
+            Current.Shutdown(0);
             return;
         }
-        if (cliArgs.Contains("--config-path"))
-        {
-            var cfg = new ConfigService();
-            var path = cfg.ResolvePath();
-            System.Console.WriteLine(path ?? "No config found");
-            return;
-        }
+if (cliArgs.Contains("--config-path"))
+{
+    var cfg = new ConfigService();
+    var path = cfg.ResolvePath();
+    System.Console.WriteLine(path ?? "No config found");
+    Current.Shutdown(0);
+    return;
+}
+if (cliArgs.Contains("--list-presets"))
+{
+    foreach (var kvp in ThemeService.Presets)
+        System.Console.WriteLine($"{kvp.Key}: {kvp.Value}");
+    Current.Shutdown(0);
+    return;
+}
+if (cliArgs.Contains("--list-modes"))
+{
+    var cfg2 = new ConfigService();
+    var config = cfg2.Load();
+    if (config?.Modes == null || config.Modes.Count == 0)
+    {
+        System.Console.WriteLine("No modes defined.");
+    }
+    else
+    {
+        foreach (var mode in config.Modes)
+            System.Console.WriteLine($"{mode.Index}. {mode.Name} - {mode.Description}");
+    }
+    Current.Shutdown(0);
+    return;
+}
 if (cliArgs.Contains("--setup"))
 {
     RunCliSetup();
@@ -79,6 +105,7 @@ if (cliArgs.Contains("--import"))
     if (idx + 1 >= cliArgs.Length)
     {
         System.Console.WriteLine("--import requires a file path");
+        Current.Shutdown(0);
         return;
     }
     var importPath = cliArgs[idx + 1];
@@ -100,6 +127,7 @@ if (cliArgs.Contains("--import"))
     {
         System.Console.WriteLine($"Import error: {ex.Message}");
     }
+    Current.Shutdown(0);
     return;
 }
 
@@ -110,6 +138,7 @@ if (cliArgs.Contains("--export"))
     if (idx + 1 >= cliArgs.Length)
     {
         System.Console.WriteLine("--export requires a file path");
+        Current.Shutdown(0);
         return;
     }
     var exportPath = cliArgs[idx + 1];
@@ -118,12 +147,14 @@ if (cliArgs.Contains("--export"))
     if (current == null)
     {
         System.Console.WriteLine("No configuration to export");
+        Current.Shutdown(0);
         return;
     }
     var json = System.Text.Json.JsonSerializer.Serialize(current, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
     System.IO.File.WriteAllText(exportPath, json);
-    System.Console.WriteLine($"Config exported to {exportPath}");
-    return;
+System.Console.WriteLine($"Config exported to {exportPath}");
+        Current.Shutdown(0);
+        return;
 }
 
         // Detect first-run: no config exists
