@@ -124,26 +124,7 @@ public sealed class ConfigService
 
 
 
-    private static string GetString(JsonElement el, string key)
-    {
-        return el.TryGetProperty(key, out var prop) && prop.ValueKind == JsonValueKind.String
-            ? prop.GetString() ?? string.Empty
-            : string.Empty;
-    }
 
-    private static List<string> GetStringArray(JsonElement el, string key)
-    {
-        var result = new List<string>();
-        if (el.TryGetProperty(key, out var prop) && prop.ValueKind == JsonValueKind.Array)
-        {
-            foreach (var item in prop.EnumerateArray())
-            {
-                if (item.ValueKind == JsonValueKind.String)
-                    result.Add(item.GetString() ?? string.Empty);
-            }
-        }
-        return result;
-    }
 
     // ---------------------------------------------------------------------
     // Validation & sanitization ------------------------------------------------
