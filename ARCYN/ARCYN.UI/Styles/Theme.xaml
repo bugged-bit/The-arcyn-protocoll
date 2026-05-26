@@ -1,0 +1,236 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="Accent">#D64545</Color>
+    <Color x:Key="AccentBright">#F08080</Color>
+    <Color x:Key="AccentLight">#F7A0A0</Color>
+    <Color x:Key="AccentDark">#8C2020</Color>
+    <Color x:Key="AccentGlow">#88D64545</Color>
+    <Color x:Key="BgSurface">#EC080808</Color>
+    <Color x:Key="BgPanel">#E9090909</Color>
+    <Color x:Key="TextPrimary">#FBFFFFFF</Color>
+    <Color x:Key="TextSecondary">#EEFFFFFF</Color>
+    <Color x:Key="TextBright">#FFFFFFFF</Color>
+    <Color x:Key="TextDim">#AAD64545</Color>
+    <Color x:Key="TextMuted">#66D64545</Color>
+
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource Accent}" />
+    <SolidColorBrush x:Key="AccentBrightBrush" Color="{StaticResource AccentBright}" />
+    <SolidColorBrush x:Key="AccentLightBrush" Color="{StaticResource AccentLight}" />
+    <SolidColorBrush x:Key="AccentDarkBrush" Color="{StaticResource AccentDark}" />
+    <SolidColorBrush x:Key="AccentGlowBrush" Color="{StaticResource AccentGlow}" />
+    <SolidColorBrush x:Key="AccentBorderBrush" Color="#33D64545" />
+    <SolidColorBrush x:Key="AccentBorderGlowBrush" Color="#44D64545" />
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimary}" />
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondary}" />
+    <SolidColorBrush x:Key="TextBrightBrush" Color="{StaticResource TextBright}" />
+    <SolidColorBrush x:Key="TextDimBrush" Color="{StaticResource TextDim}" />
+    <SolidColorBrush x:Key="TextMutedBrush" Color="{StaticResource TextMuted}" />
+    <SolidColorBrush x:Key="BgPanelBrush" Color="{StaticResource BgPanel}" />
+
+    <SolidColorBrush x:Key="BorderSubtleBrush" Color="#22D64545" />
+    <SolidColorBrush x:Key="BorderGlowBrush" Color="#55D64545" />
+
+
+    <FontFamily x:Key="UIFont">pack://application:,,,/Assets/Fonts/#JetBrainsMono NF</FontFamily>
+
+    <DropShadowEffect x:Key="GlowAccent" ShadowDepth="0" Color="#D64545" BlurRadius="2" Opacity="0.04" />
+    <DropShadowEffect x:Key="GlowAccentSoft" ShadowDepth="0" Color="#D64545" BlurRadius="1.5" Opacity="0.08" />
+    <DropShadowEffect x:Key="GlowAccentSharp" ShadowDepth="0" Color="#D64545" BlurRadius="1" Opacity="0.14" />
+
+    <Style x:Key="AmbientGlow" TargetType="Rectangle">
+        <Setter Property="Fill">
+            <Setter.Value>
+                <RadialGradientBrush>
+                    <RadialGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="0.45" ScaleY="0.45" CenterX="0.5" CenterY="0.5" />
+                        </TransformGroup>
+                    </RadialGradientBrush.RelativeTransform>
+                    <GradientStop Color="#44D64545" Offset="0" />
+                    <GradientStop Color="#00000000" Offset="1" />
+                </RadialGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="IsHitTestVisible" Value="False" />
+        <Setter Property="Opacity" Value="0.28" />
+    </Style>
+
+    <Style x:Key="Scanlines" TargetType="Rectangle">
+        <Setter Property="Fill">
+            <Setter.Value>
+                <DrawingBrush TileMode="Tile" Viewport="0,0,1,3"
+                              ViewportUnits="Absolute"
+                              Viewbox="0,0,1,3" ViewboxUnits="Absolute">
+                    <DrawingBrush.Drawing>
+                        <DrawingGroup>
+                            <GeometryDrawing Geometry="M0,0 L1,0 L1,1 L0,1Z" Brush="#08000000" />
+                            <GeometryDrawing Geometry="M0,1 L1,1 L1,2 L0,2Z" Brush="#03000000" />
+                            <GeometryDrawing Geometry="M0,2 L1,2 L1,3 L0,3Z" Brush="#00000000" />
+                        </DrawingGroup>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Opacity" Value="0.05" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+
+    <Style x:Key="Vignette" TargetType="Rectangle">
+        <Setter Property="Fill">
+            <Setter.Value>
+                <RadialGradientBrush>
+                    <RadialGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="1.8" ScaleY="1.8" CenterX="0.5" CenterY="0.5" />
+                        </TransformGroup>
+                    </RadialGradientBrush.RelativeTransform>
+                    <GradientStop Color="#00000000" Offset="0.4" />
+                    <GradientStop Color="#88000000" Offset="1" />
+                </RadialGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+
+    <Style x:Key="WorkstationPanelStyle" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource UIFont}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Foreground" Value="{StaticResource TextDimBrush}" />
+        <Setter Property="Background" Value="#D8080808" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="RootBorder"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="3"
+                            BorderThickness="1"
+                            BorderBrush="#66D64545"
+                            Padding="0"
+                            TextOptions.TextFormattingMode="Display">
+                        <Grid>
+<Rectangle x:Name="LeftAccent" Width="0"
+                                           Fill="{StaticResource AccentBrush}"
+                                           HorizontalAlignment="Left"
+                                           Opacity="0" />
+                            <Rectangle x:Name="GlowOverlay"
+                                       Fill="{StaticResource AccentGlowBrush}"
+                                       Opacity="0" IsHitTestVisible="False" />
+                            <Rectangle x:Name="HoverBg" Fill="#18D64545" Opacity="0" />
+                            <ContentPresenter Margin="0"
+                                              VerticalAlignment="Stretch"
+                                              HorizontalAlignment="Stretch"
+                                              RecognizesAccessKey="False" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="RootBorder"
+                                                        Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                        To="#D8D64545" Duration="0:0:0.10" />
+                                        <DoubleAnimation Storyboard.TargetName="LeftAccent"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1.0" Duration="0:0:0.12" />
+                                        <DoubleAnimation Storyboard.TargetName="HoverBg"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1" Duration="0:0:0.12" />
+                                        <DoubleAnimation Storyboard.TargetName="GlowOverlay"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.22" Duration="0:0:0.12" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="RootBorder"
+                                                        Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                        To="#66D64545" Duration="0:0:0.20" />
+                                        <DoubleAnimation Storyboard.TargetName="LeftAccent"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.5" Duration="0:0:0.20" />
+                                        <DoubleAnimation Storyboard.TargetName="HoverBg"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0" Duration="0:0:0.20" />
+                                        <DoubleAnimation Storyboard.TargetName="GlowOverlay"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0" Duration="0:0:0.20" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="RootBorder"
+                                                        Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                        To="#EAF08080" Duration="0:0:0.04" />
+                                        <DoubleAnimation Storyboard.TargetName="LeftAccent"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1.0" Duration="0:0:0.04" />
+                                        <DoubleAnimation Storyboard.TargetName="GlowOverlay"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.35" Duration="0:0:0.04" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="RootBorder"
+                                                        Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                        To="#88D64545" Duration="0:0:0.12" />
+                                        <DoubleAnimation Storyboard.TargetName="LeftAccent"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.5" Duration="0:0:0.12" />
+                                        <DoubleAnimation Storyboard.TargetName="GlowOverlay"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0" Duration="0:0:0.12" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="RootBorder"
+                                                        Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                        To="#BFD64545" Duration="0:0:0.08" />
+                                        <DoubleAnimation Storyboard.TargetName="LeftAccent"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1.0" Duration="0:0:0.08" />
+                                        <DoubleAnimation Storyboard.TargetName="GlowOverlay"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.18" Duration="0:0:0.08" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="RootBorder"
+                                                        Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                        To="#66D64545" Duration="0:0:0.20" />
+                                        <DoubleAnimation Storyboard.TargetName="LeftAccent"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.5" Duration="0:0:0.20" />
+                                        <DoubleAnimation Storyboard.TargetName="GlowOverlay"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0" Duration="0:0:0.20" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

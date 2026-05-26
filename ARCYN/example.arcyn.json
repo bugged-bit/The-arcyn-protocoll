@@ -1,0 +1,44 @@
+{
+  "$schema": "./arcyn.schema.json",
+  "theme": {
+    "accent": "#D64545",
+    "glow_opacity": 0.28,
+    "scanlines": true,
+    "animations": true
+  },
+  "behavior": {
+    "idle_timeout_seconds": 10,
+    "always_on_top": true,
+    "close_on_launch": true
+  },
+  "modes": [
+    {
+      "name": "CODE",
+      "description": "Development stack online",
+      "accent": "#D64545",
+      "apps": ["wt.exe", "code"],
+      "websites": ["https://github.com", "https://chatgpt.com"],
+      "folders": []
+    },
+    {
+      "name": "BROWSE",
+      "description": "Research and references",
+      "accent": "#45A0D6",
+      "apps": [],
+      "websites": [
+        "https://www.wikipedia.org",
+        "https://news.ycombinator.com",
+        "https://stackoverflow.com"
+      ],
+      "folders": []
+    },
+    {
+      "name": "CREATE",
+      "description": "Design and media workspace",
+      "accent": "#D6A045",
+      "apps": ["mspaint"],
+      "websites": ["https://www.pinterest.com"],
+      "folders": []
+    }
+  ]
+}
