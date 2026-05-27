@@ -4,8 +4,18 @@ namespace ARCYN.UI;
 
 internal static class NativeMethods
 {
+    // ------------------------------------------------------------
+    // P/Invoke wrappers – call native APIs only on Windows.
+    // ------------------------------------------------------------
+    // SetWindowCompositionAttribute – enable acrylic blur.
     [DllImport("user32.dll")]
-    internal static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
+    private static extern int SetWindowCompositionAttributeNative(IntPtr hwnd, ref WindowCompositionAttributeData data);
+    internal static int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            return SetWindowCompositionAttributeNative(hwnd, ref data);
+        return 0; // no‑op on non‑Windows
+    }
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct WindowCompositionAttributeData
@@ -57,6 +67,7 @@ internal static class NativeMethods
             SizeOfData = accentStructSize
         };
 
+        // Windows only – safe no‑op on Linux.
         SetWindowCompositionAttribute(hwnd, ref data);
         Marshal.FreeHGlobal(accentPtr);
     }
@@ -68,17 +79,44 @@ internal static class NativeMethods
     internal const int SW_SHOW = 5;
     internal const int SW_HIDE = 0;
 
+    // Get/Set window styles
     [DllImport("user32.dll")]
-    internal static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+    private static extern int GetWindowLongNative(IntPtr hWnd, int nIndex);
+    internal static int GetWindowLong(IntPtr hWnd, int nIndex)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            return GetWindowLongNative(hWnd, nIndex);
+        return 0;
+    }
 
     [DllImport("user32.dll")]
-    internal static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+    private static extern int SetWindowLongNative(IntPtr hWnd, int nIndex, int dwNewLong);
+    internal static int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            return SetWindowLongNative(hWnd, nIndex, dwNewLong);
+        return 0;
+    }
 
+    // Show/Hide window
     [DllImport("user32.dll")]
-    internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+    private static extern bool ShowWindowNative(IntPtr hWnd, int nCmdShow);
+    internal static bool ShowWindow(IntPtr hWnd, int nCmdShow)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            return ShowWindowNative(hWnd, nCmdShow);
+        return false;
+    }
 
+    // Set window position
     [DllImport("user32.dll")]
-    internal static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+    private static extern bool SetWindowPosNative(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+    internal static bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            return SetWindowPosNative(hWnd, hWndInsertAfter, X, Y, cx, cy, uFlags);
+        return false;
+    }
 
     internal static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
     internal static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
@@ -86,9 +124,23 @@ internal static class NativeMethods
     internal const uint SWP_NOSIZE = 0x0001;
     internal const uint SWP_SHOWWINDOW = 0x0040;
 
+    // Console window handle – only relevant on Windows.
     [DllImport("kernel32.dll")]
-    internal static extern IntPtr GetConsoleWindow();
+    private static extern IntPtr GetConsoleWindowNative();
+    internal static IntPtr GetConsoleWindow()
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            return GetConsoleWindowNative();
+        return IntPtr.Zero;
+    }
 
+    // Asynchronous show – Windows only.
     [DllImport("user32.dll")]
-    internal static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+    private static extern bool ShowWindowAsyncNative(IntPtr hWnd, int nCmdShow);
+    internal static bool ShowWindowAsync(IntPtr hWnd, int nCmdShow)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            return ShowWindowAsyncNative(hWnd, nCmdShow);
+        return false;
+    }
 }

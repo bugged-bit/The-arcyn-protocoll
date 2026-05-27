@@ -25,6 +25,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ARCYN.Core\ARCYN.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Services\ConfigService.cs" />
+    <Compile Remove="Services\LogService.cs" />
+    <Compile Remove="Services\ModeService.cs" />
+    <Compile Remove="Services\LaunchOrchestrator.cs" />
+    <Compile Remove="Services\LaunchService.cs" />
+    <Compile Remove="Models\ArcynConfig.cs" />
+    <Compile Remove="Models\ModeConfig.cs" />
+    <Compile Remove="Models\ModeConfig.UI.cs" />
+    <Compile Remove="AppState.cs" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Assets\Fonts\*" />
   </ItemGroup>
 
@@ -34,4 +52,7 @@
 
 
 
+  <ItemGroup>
+    <ProjectReference Include="..\\ARCYN.Platform\\ARCYN.Platform.csproj" />
+  </ItemGroup>
 </Project>

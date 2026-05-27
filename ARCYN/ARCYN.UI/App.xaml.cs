@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using ARCYN.UI.Services;
+using System.Runtime.InteropServices;
 
 namespace ARCYN.UI;
 
@@ -31,11 +32,7 @@ public partial class App : Application
             }
             catch { }
 
-            System.Windows.MessageBox.Show(
-                $"ARCYN encountered an unexpected error.\n\n{args.Exception.Message}",
-                "ARCYN",
-                System.Windows.MessageBoxButton.OK,
-                System.Windows.MessageBoxImage.Error);
+            _alertService.Show($"ARCYN encountered an unexpected error.\n\n{args.Exception.Message}", "ARCYN");
 
             args.Handled = true;
             Current.Shutdown(-1);
@@ -178,11 +175,7 @@ System.Console.WriteLine($"Config exported to {exportPath}");
         catch (Exception ex)
         {
             LogService.WriteStatic("Startup error: {0}", ex.Message);
-            System.Windows.MessageBox.Show(
-                $"ARCYN encountered an error during startup.\n\n{ex.Message}",
-                "ARCYN",
-                System.Windows.MessageBoxButton.OK,
-                System.Windows.MessageBoxImage.Error);
+            _alertService.Show($"ARCYN encountered an error during startup.\n\n{ex.Message}", "ARCYN");
             Current.Shutdown(-1);
         }
     }
@@ -220,7 +213,8 @@ System.Console.WriteLine("  --export <path>  Export current config");
             if (string.IsNullOrWhiteSpace(name))
             {
                 if (arcynConfig.Modes.Count == 0)
-                {
+{
+    private static readonly IAlertService _alertService = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new WpfAlertService() : new ConsoleAlertService();
                     System.Console.WriteLine("Need at least one mode.");
                     continue;
                 }

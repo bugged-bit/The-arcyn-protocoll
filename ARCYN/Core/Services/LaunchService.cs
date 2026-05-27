@@ -8,7 +8,6 @@ namespace ARCYN.UI.Services;
 
 public static class LaunchService
 {
-    private static readonly IPlatformLauncher _launcher = PlatformLauncherFactory.Create();
     // New robust creation – validates and normalizes before building ProcessStartInfo.
     public static bool TryPrepare(TargetItem target, out ProcessStartInfo psi, out string? error)
     {
@@ -58,7 +57,25 @@ public static class LaunchService
 
 
 
-
+        // Shortcut (.lnk) – ensure file exists
+        var ext = System.IO.Path.GetExtension(cmd);
+        if (ext.Equals(".lnk", StringComparison.OrdinalIgnoreCase))
+        {
+            if (!File.Exists(cmd))
+            {
+                error = ".lnk file not found";
+                return false;
+            }
+            psi = new ProcessStartInfo
+            {
+                FileName = cmd,
+                Arguments = string.Empty,
+                UseShellExecute = true,
+                WindowStyle = ProcessWindowStyle.Normal,
+                WorkingDirectory = workingDir
+            };
+            return true;
+        }
 
         // Executable or shell command handling
         // Separate executable part from arguments to support commands like "git status".
@@ -71,7 +88,8 @@ public static class LaunchService
             {
                 var endQuoteIdx = cmd.IndexOf('"', 1);
                 if (endQuoteIdx > 1)
-                {
+{
+    private static readonly IPlatformLauncher _launcher = PlatformLauncherFactory.Create();
                     exePart = cmd.Substring(1, endQuoteIdx - 1);
                     argsPart = cmd.Substring(endQuoteIdx + 1).Trim();
                 }
