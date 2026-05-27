@@ -1,6 +1,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using ARCYN.Core.Services;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -341,24 +342,13 @@ public partial class SetupWindow : Window
             AppsList.Items.Remove(app);
     }
 
+    private readonly IFolderPicker _folderPicker = new WindowsFolderPicker();
+
     private void AddFolder_Click(object sender, RoutedEventArgs e)
     {
-        // Use native WPF folder picker via OpenFileDialog workaround
-        var dialog = new Microsoft.Win32.OpenFileDialog
-        {
-            Title = "Select a folder",
-            ValidateNames = false,
-            CheckFileExists = false,
-            CheckPathExists = true,
-            FileName = "Select"
-        };
-
-        if (dialog.ShowDialog() == true)
-        {
-            var dir = System.IO.Path.GetDirectoryName(dialog.FileName);
-            if (!string.IsNullOrEmpty(dir))
-                FoldersList.Items.Add(dir);
-        }
+        var folder = _folderPicker.PickFolder("Select a folder");
+        if (!string.IsNullOrWhiteSpace(folder))
+            FoldersList.Items.Add(folder);
     }
 
     private void RemoveFolder_Click(object sender, RoutedEventArgs e)

@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using ARCYN.Platform;
 using ARCYN.UI.Models;
 using ARCYN.UI.Services;
 
@@ -457,7 +458,12 @@ public partial class MainWindow : Window, IDisposable, RenderService.ISubscriber
             LaunchTargetCount.Text = $"{mode.Targets.Count} TARGETS";
 
             // Launch orchestration – validation, start, progress
-            var orchestrator = new LaunchOrchestrator(_log);
+            var orchestrator = new LaunchOrchestrator(_log, target =>
+            {
+                var launcher = PlatformLauncherFactory.Create();
+                try { return launcher.CreateLaunchInfo(target); }
+                catch (Exception ex) { _log.Write("Launch prep fail: ", ex); return null; }
+            });
             // Clear previous launch feed for this run
             _launchFeedBuilder.Clear();
             LaunchFeedText.Text = string.Empty;

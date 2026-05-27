@@ -20,7 +20,7 @@ ARCYN/**/*.pdb
 ARCYN/**/*.deps.json
 ARCYN/**/*.runtimeconfig.json
 ARCYN/arcyn_launch.log
-session.md
+session*.md
 vroken.md
 explanation.txt
 arcyn.json

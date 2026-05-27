@@ -1,6 +1,8 @@
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using ARCYN.UI.Services;
 
 namespace ARCYN.Avalonia;
 
@@ -15,6 +17,19 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            var cfg = new ConfigService();
+            var config = cfg.Load();
+
+            if (config == null || config.Modes.Count == 0)
+            {
+                LogService.WriteStatic("First-run — no config found. Run with --setup to create modes.");
+                Console.Error.WriteLine("ARCYN: No configuration found. Use --setup to create your first mode.");
+            }
+            else
+            {
+                LogService.WriteStatic("Config loaded ({0} modes).", config.Modes.Count);
+            }
+
             desktop.MainWindow = new MainWindow();
         }
 

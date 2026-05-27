@@ -1,23 +1,43 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using ARCYN.UI.Models;
-using ARCYN.UI.Services;
 
 namespace ARCYN.UI.Services;
 
 public sealed class LaunchOrchestrator
 {
     private readonly LogService _log;
-    public LaunchOrchestrator(LogService log) => _log = log;
+    private readonly Func<TargetItem, ProcessStartInfo?> _processInfoFactory;
+
+    public LaunchOrchestrator(LogService log, Func<TargetItem, ProcessStartInfo?>? processInfoFactory = null)
+    {
+        _log = log;
+        _processInfoFactory = processInfoFactory ?? DefaultProcessInfoFactory;
+    }
+
+    private static ProcessStartInfo? DefaultProcessInfoFactory(TargetItem target)
+    {
+        if (target.Kind == TargetKind.Website)
+            return new ProcessStartInfo(target.LaunchCmd ?? string.Empty) { UseShellExecute = true };
+
+        if (target.Kind == TargetKind.Folder)
+        {
+            _ = target.LaunchArg ?? string.Empty;
+            return null; // folder launch not supported via fallback
+        }
+
+        var cmd = target.LaunchCmd ?? string.Empty;
+        return new ProcessStartInfo(cmd) { UseShellExecute = true };
+    }
 
     public async Task<LaunchResult> LaunchModeAsync(ModeConfig mode, CancellationToken token, IProgress<LaunchProgress>? progress = null)
     {
         var result = new LaunchResult { TotalTargets = mode.Targets.Count };
         int completed = 0;
+
         foreach (var target in mode.Targets)
         {
             if (token.IsCancellationRequested)
@@ -25,14 +45,31 @@ public sealed class LaunchOrchestrator
                 result.Canceled = true;
                 break;
             }
-            if (!LaunchService.TryPrepare(target, out var psi, out var error))
+
+            ProcessStartInfo? psi;
+            string? error = null;
+
+            try
+            {
+                psi = _processInfoFactory(target);
+                if (psi == null)
+                    error = "Unsupported target kind for fallback launcher.";
+            }
+            catch (Exception ex)
+            {
+                psi = null;
+                error = ex.Message;
+            }
+
+            if (psi == null)
             {
                 result.Failures.Add(target.DisplayLabel);
-                _log.Write("VALIDATION FAIL: {0} – {1}", target.DisplayLabel, error);
+                _log.Write("VALIDATION FAIL: {0} – {1}", target.DisplayLabel, error ?? "unknown");
                 completed++;
                 progress?.Report(new LaunchProgress { CompletedTargets = completed, TotalTargets = result.TotalTargets, CurrentLabel = target.DisplayLabel });
                 continue;
             }
+
             try
             {
                 using var proc = Process.Start(psi);
@@ -52,10 +89,12 @@ public sealed class LaunchOrchestrator
                 result.Failures.Add(target.DisplayLabel);
                 _log.Write("FAIL: {0} \n{1}", target.DisplayLabel, ex);
             }
+
             completed++;
             progress?.Report(new LaunchProgress { CompletedTargets = completed, TotalTargets = result.TotalTargets, CurrentLabel = target.DisplayLabel });
             await Task.Yield();
         }
+
         return result;
     }
 }
