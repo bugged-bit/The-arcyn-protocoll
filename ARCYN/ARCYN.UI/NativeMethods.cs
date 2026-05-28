@@ -124,6 +124,50 @@ internal static class NativeMethods
     internal const uint SWP_NOSIZE = 0x0001;
     internal const uint SWP_SHOWWINDOW = 0x0040;
 
+    // ---- Hardware telemetry (kernel32) ----
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool GetPhysicallyInstalledSystemMemoryNative(out ulong totalMemoryKb);
+    internal static bool GetPhysicallyInstalledSystemMemory(out ulong totalMemoryKb)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            return GetPhysicallyInstalledSystemMemoryNative(out totalMemoryKb);
+        totalMemoryKb = 0;
+        return false;
+    }
+
+    [DllImport("kernel32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool GlobalMemoryStatusExNative(ref MEMORYSTATUSEX lpBuffer);
+
+    [DllImport("kernel32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool GetSystemTimesNative(out long lpIdleTime, out long lpKernelTime, out long lpUserTime);
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct MEMORYSTATUSEX
+    {
+        public uint dwLength;
+        public uint dwMemoryLoad;
+        public ulong ullTotalPhys;
+        public ulong ullAvailPhys;
+        public ulong ullTotalPageFile;
+        public ulong ullAvailPageFile;
+        public ulong ullTotalVirtual;
+        public ulong ullAvailVirtual;
+        public ulong ullAvailExtendedVirtual;
+    }
+
+    internal static MEMORYSTATUSEX GetMemoryStatus()
+    {
+        var mem = new MEMORYSTATUSEX();
+        mem.dwLength = (uint)Marshal.SizeOf(typeof(MEMORYSTATUSEX));
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            GlobalMemoryStatusExNative(ref mem);
+        return mem;
+    }
+
     // Console window handle – only relevant on Windows.
     [DllImport("kernel32.dll")]
     private static extern IntPtr GetConsoleWindowNative();

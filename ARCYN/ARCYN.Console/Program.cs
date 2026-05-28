@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using ARCYN.UI.Models;
+using ARCYN.Core.Models;
+using ARCYN.Core.Services;
+using ARCYN.Platform;
 using ARCYN.UI.Services;
 
 namespace ARCYN.Console;
@@ -31,7 +33,7 @@ class Program
             Behavior = new BehaviorConfig()
         };
 
-        var configService = new ConfigService();
+        var configService = new ConfigService(new ConfigPathProvider());
         // Save asynchronously (creates file in appropriate location)
         await configService.SaveAsync(config);
         System.Console.WriteLine("Config saved.");

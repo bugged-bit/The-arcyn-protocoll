@@ -1,6 +1,9 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Windows;
+using ARCYN.Core.Models;
+using ARCYN.Core.Services;
+using ARCYN.Platform;
 using ARCYN.UI.Services;
 using System.Runtime.InteropServices;
 
@@ -8,6 +11,8 @@ namespace ARCYN.UI;
 
 public partial class App : Application
 {
+    private static readonly IAlertService _alertService = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new WpfAlertService() : new ConsoleAlertService();
+
     private void Application_Startup(object sender, StartupEventArgs e)
     {
         var logPath = Path.Combine(AppContext.BaseDirectory, "arcyn_launch.log");
@@ -60,7 +65,7 @@ public partial class App : Application
         }
 if (cliArgs.Contains("--config-path"))
 {
-    var cfg = new ConfigService();
+    var cfg = new ConfigService(new ConfigPathProvider());
     var path = cfg.ResolvePath();
     System.Console.WriteLine(path ?? "No config found");
     Current.Shutdown(0);
@@ -75,7 +80,7 @@ if (cliArgs.Contains("--list-presets"))
 }
 if (cliArgs.Contains("--list-modes"))
 {
-    var cfg2 = new ConfigService();
+    var cfg2 = new ConfigService(new ConfigPathProvider());
     var config = cfg2.Load();
     if (config?.Modes == null || config.Modes.Count == 0)
     {
@@ -109,10 +114,10 @@ if (cliArgs.Contains("--import"))
     try
     {
         var json = System.IO.File.ReadAllText(importPath);
-        var config = System.Text.Json.JsonSerializer.Deserialize<ARCYN.UI.Models.ArcynConfig>(json, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        var config = System.Text.Json.JsonSerializer.Deserialize<ARCYN.Core.Models.ArcynConfig>(json, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         if (config != null)
         {
-            new ConfigService().Save(config);
+            new ConfigService(new ConfigPathProvider()).Save(config);
             System.Console.WriteLine($"Config imported from {importPath}");
         }
         else
@@ -139,7 +144,7 @@ if (cliArgs.Contains("--export"))
         return;
     }
     var exportPath = cliArgs[idx + 1];
-    var cfg = new ConfigService();
+    var cfg = new ConfigService(new ConfigPathProvider());
     var current = cfg.Load();
     if (current == null)
     {
@@ -157,7 +162,7 @@ System.Console.WriteLine($"Config exported to {exportPath}");
         // Detect first-run: no config exists
         try
         {
-            var config = new ConfigService();
+            var config = new ConfigService(new ConfigPathProvider());
             var existing = config.Load();
 
             if (existing == null)
@@ -200,8 +205,8 @@ System.Console.WriteLine("  --export <path>  Export current config");
         // Headless CLI setup for terminal users
         System.Console.WriteLine("=== ARCYN Setup (CLI) ===");
 
-        var config = new Services.ConfigService();
-        var arcynConfig = new Models.ArcynConfig();
+        var config = new ConfigService(new ConfigPathProvider());
+        var arcynConfig = new ArcynConfig();
 
         System.Console.WriteLine("Create your workspace modes.");
         System.Console.WriteLine("Press Enter with empty name to finish.\n");
@@ -213,15 +218,14 @@ System.Console.WriteLine("  --export <path>  Export current config");
             if (string.IsNullOrWhiteSpace(name))
             {
                 if (arcynConfig.Modes.Count == 0)
-{
-    private static readonly IAlertService _alertService = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new WpfAlertService() : new ConsoleAlertService();
+                {
                     System.Console.WriteLine("Need at least one mode.");
                     continue;
                 }
                 break;
             }
 
-            var mode = new Models.ModeConfig { Name = name };
+            var mode = new ModeConfig { Name = name };
 
             System.Console.Write("  Description: ");
             mode.Description = System.Console.ReadLine()?.Trim() ?? "";

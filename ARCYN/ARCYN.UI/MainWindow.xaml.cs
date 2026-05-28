@@ -9,8 +9,10 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using ARCYN.Core;
+using ARCYN.Core.Services;
 using ARCYN.Platform;
-using ARCYN.UI.Models;
+using ARCYN.Core.Models;
 using ARCYN.UI.Services;
 
 namespace ARCYN.UI;
@@ -19,7 +21,7 @@ public partial class MainWindow : Window, IDisposable, RenderService.ISubscriber
 {
     private readonly AppState _state = new();
     private readonly LogService _log;
-    private readonly ConfigService _config = new();
+    private readonly ConfigService _config = new ConfigService(new ConfigPathProvider());
     private readonly ModeService _modes;
     private readonly ThemeService _theme = new();
     private readonly RenderService _render;

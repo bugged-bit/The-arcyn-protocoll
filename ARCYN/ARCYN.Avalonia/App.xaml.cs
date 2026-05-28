@@ -2,7 +2,8 @@ using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using ARCYN.UI.Services;
+using ARCYN.Core.Services;
+using ARCYN.Platform;
 
 namespace ARCYN.Avalonia;
 
@@ -17,7 +18,7 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var cfg = new ConfigService();
+            var cfg = new ConfigService(new ConfigPathProvider());
             var config = cfg.Load();
 
             if (config == null || config.Modes.Count == 0)

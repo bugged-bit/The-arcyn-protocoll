@@ -1,14 +1,15 @@
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 
 namespace ARCYN.UI;
 
 public sealed class TelemetryMonitor : IDisposable
 {
-    private PerformanceCounter? _cpuCounter;
-    private PerformanceCounter? _ramAvailCounter;
+#if WINDOWS
+    private long _prevIdleTime;
+    private long _prevKernelTime;
+    private long _prevUserTime;
+#endif
     private readonly double _totalRamMb;
     private bool _disposed;
 
@@ -17,68 +18,39 @@ public sealed class TelemetryMonitor : IDisposable
 
     public TelemetryMonitor()
     {
-        // Initialize counters only on Windows
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            try
-            {
-                _cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-                _ = _cpuCounter.NextValue();
-            }
-            catch
-            {
-                _cpuCounter = null;
-            }
-
-            try
-            {
-                _ramAvailCounter = new PerformanceCounter("Memory", "Available MBytes");
-                _ = _ramAvailCounter.NextValue();
-            }
-            catch
-            {
-                _ramAvailCounter = null;
-            }
-        }
-
+#if WINDOWS
         _totalRamMb = GetTotalRamMb();
+#else
+        _totalRamMb = GetTotalRamMb();
+#endif
     }
 
     private static double GetTotalRamMb()
     {
-        // Windows: use WMI
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+#if WINDOWS
+        try
         {
-            try
-            {
-                using var searcher = new System.Management.ManagementObjectSearcher(
-                    "SELECT TotalPhysicalMemory FROM Win32_ComputerSystem");
-                foreach (var obj in searcher.Get())
-                    return Convert.ToDouble(obj["TotalPhysicalMemory"]) / (1024.0 * 1024.0);
-            }
-            catch { }
+            if (NativeMethods.GetPhysicallyInstalledSystemMemory(out var kb))
+                return kb / 1024.0;
         }
-
-        // Linux / Unix: parse /proc/meminfo
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        catch { }
+#else
+        // Linux: parse /proc/meminfo
+        try
         {
-            try
+            var lines = File.ReadAllLines("/proc/meminfo");
+            foreach (var line in lines)
             {
-                var lines = File.ReadAllLines("/proc/meminfo");
-                foreach (var line in lines)
+                if (line.StartsWith("MemTotal:", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (line.StartsWith("MemTotal:", StringComparison.OrdinalIgnoreCase))
-                    {
-                        var parts = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                        if (parts.Length >= 2 && long.TryParse(parts[1], out var kb))
-                            return kb / 1024.0;
-                    }
+                    var parts = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length >= 2 && long.TryParse(parts[1], out var kb))
+                        return kb / 1024.0;
                 }
             }
-            catch { }
         }
-
-        // Fallback default (16 GB)
+        catch { }
+#endif
         return 16384;
     }
 
@@ -87,23 +59,31 @@ public sealed class TelemetryMonitor : IDisposable
         if (_disposed) return;
         try
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+#if WINDOWS
+            if (NativeMethods.GetSystemTimesNative(out var idle, out var kernel, out var user))
             {
-                if (_cpuCounter != null)
-                    CpuPercent = (float)Math.Round(_cpuCounter.NextValue(), 1);
-
-                if (_ramAvailCounter != null && _totalRamMb > 0)
+                if (_prevIdleTime != 0)
                 {
-                    var used = _totalRamMb - _ramAvailCounter.NextValue();
-                    RamPercent = (float)Math.Round(Math.Clamp(used / _totalRamMb * 100.0, 0, 100), 1);
+                    var totalDelta = (kernel + user) - (_prevKernelTime + _prevUserTime);
+                    var idleDelta = idle - _prevIdleTime;
+                    if (totalDelta > 0)
+                        CpuPercent = (float)Math.Round((totalDelta - idleDelta) * 100.0 / totalDelta, 1);
                 }
+                _prevIdleTime = idle;
+                _prevKernelTime = kernel;
+                _prevUserTime = user;
             }
-            else
+
+            var mem = NativeMethods.GetMemoryStatus();
+            if (mem.ullTotalPhys > 0)
             {
-                // On non‑Windows platforms, set placeholders (could be extended later)
-                CpuPercent = 0;
-                RamPercent = 0;
+                var used = mem.ullTotalPhys - mem.ullAvailPhys;
+                RamPercent = (float)Math.Round(Math.Clamp(used * 100.0 / (double)mem.ullTotalPhys, 0, 100), 1);
             }
+#else
+            CpuPercent = 0;
+            RamPercent = 0;
+#endif
         }
         catch { }
     }
@@ -112,8 +92,6 @@ public sealed class TelemetryMonitor : IDisposable
     {
         if (_disposed) return;
         _disposed = true;
-        _cpuCounter?.Dispose();
-        _ramAvailCounter?.Dispose();
         GC.SuppressFinalize(this);
     }
 }

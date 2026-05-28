@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using ARCYN.UI.Models;
+using ARCYN.Core.Models;
 
 namespace ARCYN.Platform;
 

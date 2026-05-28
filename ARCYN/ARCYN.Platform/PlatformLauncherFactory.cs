@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using ARCYN.UI.Services;
+using ARCYN.Core.Services;
 
 namespace ARCYN.Platform;
 

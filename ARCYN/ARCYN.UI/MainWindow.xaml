@@ -45,7 +45,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Border Background="{Binding AccentBarBrush}" CornerRadius="2,0,0,2">
+                    <Border Background="{Binding Accent}" Opacity="0.35" CornerRadius="2,0,0,2">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="{Binding IndexLabel}"
                                        FontSize="13"

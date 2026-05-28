@@ -2,12 +2,13 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using ARCYN.Core.Services;
+using ARCYN.Platform;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Interop;
 using System.Windows.Threading;
-using ARCYN.UI.Models;
+using ARCYN.Core.Models;
 using ARCYN.UI.Services;
 
 
@@ -15,7 +16,7 @@ namespace ARCYN.UI;
 
 public partial class SetupWindow : Window
 {
-    private readonly ConfigService _config = new();
+    private readonly ConfigService _config = new ConfigService(new ConfigPathProvider());
     private readonly List<ModeConfig> _modes = [];
     private ModeConfig? _currentMode;
     private int _step;

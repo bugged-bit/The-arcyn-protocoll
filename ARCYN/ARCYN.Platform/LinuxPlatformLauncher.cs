@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
-using ARCYN.UI.Models;
-using ARCYN.UI.Services;
+using ARCYN.Core.Models;
+using ARCYN.Core.Services;
 
 namespace ARCYN.Platform;
 

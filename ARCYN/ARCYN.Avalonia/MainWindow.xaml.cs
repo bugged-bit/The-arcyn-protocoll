@@ -4,14 +4,15 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using ARCYN.UI.Models;
-using ARCYN.UI.Services;
+using ARCYN.Core.Models;
+using ARCYN.Core.Services;
+using ARCYN.Platform;
 
 namespace ARCYN.Avalonia;
 
 public partial class MainWindow : Window
 {
-    private readonly ConfigService _configService = new();
+    private readonly ConfigService _configService = new ConfigService(new ConfigPathProvider());
     private readonly List<ModeConfig> _modes = new();
 
     public MainWindow()
