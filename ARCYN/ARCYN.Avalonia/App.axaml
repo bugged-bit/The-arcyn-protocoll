@@ -1,0 +1,18 @@
+<Application x:Class="ARCYN.Avalonia.App"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ARCYN.Avalonia"
+             xmlns:conv="clr-namespace:ARCYN.UI.Converters"
+             Startup="Application_Startup">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/Theme.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <conv:StringToBrushConverter x:Key="AccentBarConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+</Application>

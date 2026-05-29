@@ -1,0 +1,88 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="Accent">#D64545</Color>
+    <Color x:Key="AccentBright">#F08080</Color>
+    <Color x:Key="AccentLight">#F7A0A0</Color>
+    <Color x:Key="AccentGlow">#88D64545</Color>
+    <Color x:Key="TextPrimary">#FBFFFFFF</Color>
+    <Color x:Key="TextBright">#FFFFFFFF</Color>
+    <Color x:Key="TextDim">#AAD64545</Color>
+    <Color x:Key="TextMuted">#66D64545</Color>
+
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource Accent}" />
+    <SolidColorBrush x:Key="AccentBrightBrush" Color="{StaticResource AccentBright}" />
+    <SolidColorBrush x:Key="AccentLightBrush" Color="{StaticResource AccentLight}" />
+    <SolidColorBrush x:Key="AccentGlowBrush" Color="{StaticResource AccentGlow}" />
+    <SolidColorBrush x:Key="AccentBorderBrush" Color="#33D64545" />
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimary}" />
+    <SolidColorBrush x:Key="TextBrightBrush" Color="{StaticResource TextBright}" />
+    <SolidColorBrush x:Key="TextDimBrush" Color="{StaticResource TextDim}" />
+    <SolidColorBrush x:Key="TextMutedBrush" Color="{StaticResource TextMuted}" />
+
+    <SolidColorBrush x:Key="BorderSubtleBrush" Color="#22D64545" />
+    <SolidColorBrush x:Key="BorderGlowBrush" Color="#55D64545" />
+
+    <FontFamily x:Key="UIFont">pack://application:,,,/Assets/Fonts/#JetBrainsMono NF</FontFamily>
+
+    <DropShadowEffect x:Key="GlowAccent" ShadowDepth="0" Color="#D64545" BlurRadius="2" Opacity="0.04" />
+    <DropShadowEffect x:Key="GlowAccentSoft" ShadowDepth="0" Color="#D64545" BlurRadius="1.5" Opacity="0.08" />
+    <DropShadowEffect x:Key="GlowAccentSharp" ShadowDepth="0" Color="#D64545" BlurRadius="1" Opacity="0.14" />
+
+    <Style x:Key="AmbientGlow" TargetType="Rectangle">
+        <Setter Property="Fill">
+            <Setter.Value>
+                <RadialGradientBrush>
+                    <RadialGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="0.45" ScaleY="0.45" CenterX="0.5" CenterY="0.5" />
+                        </TransformGroup>
+                    </RadialGradientBrush.RelativeTransform>
+                    <GradientStop Color="#44D64545" Offset="0" />
+                    <GradientStop Color="#00000000" Offset="1" />
+                </RadialGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="IsHitTestVisible" Value="False" />
+        <Setter Property="Opacity" Value="0.28" />
+    </Style>
+
+    <Style x:Key="Scanlines" TargetType="Rectangle">
+        <Setter Property="Fill">
+            <Setter.Value>
+                <DrawingBrush TileMode="Tile" Viewport="0,0,1,3"
+                              ViewportUnits="Absolute"
+                              Viewbox="0,0,1,3" ViewboxUnits="Absolute">
+                    <DrawingBrush.Drawing>
+                        <DrawingGroup>
+                            <GeometryDrawing Geometry="M0,0 L1,0 L1,1 L0,1Z" Brush="#08000000" />
+                            <GeometryDrawing Geometry="M0,1 L1,1 L1,2 L0,2Z" Brush="#03000000" />
+                            <GeometryDrawing Geometry="M0,2 L1,2 L1,3 L0,3Z" Brush="#00000000" />
+                        </DrawingGroup>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Opacity" Value="0.05" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+
+    <Style x:Key="Vignette" TargetType="Rectangle">
+        <Setter Property="Fill">
+            <Setter.Value>
+                <RadialGradientBrush>
+                    <RadialGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="1.8" ScaleY="1.8" CenterX="0.5" CenterY="0.5" />
+                        </TransformGroup>
+                    </RadialGradientBrush.RelativeTransform>
+                    <GradientStop Color="#00000000" Offset="0.4" />
+                    <GradientStop Color="#88000000" Offset="1" />
+                </RadialGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+
+    <!-- Additional styles omitted for brevity; copy as needed -->
+</ResourceDictionary>
