@@ -7,20 +7,6 @@ obj/
 .vs/
 packages/
 *.nupkg
-*.dll
-!ARCYN.UI/Assets/**
-ARCYN.exe
-ARCYN.dll
-ARCYN.deps.json
-ARCYN.runtimeconfig.json
-publish/
-ARCYN/ARCYN.exe
-ARCYN/arcyn_launch.log
-session.md
-vroken.md
-explanation.txt
-arcyn.json
-ARCYN/ARCYN.UI/arcyn.json
 
 # AppImage build output
 dist/
@@ -38,9 +24,6 @@ flathub-submission.txt
 
 # Shell scripts (local-only)
 smoke-test.sh
-
-# Windows binaries (general)
-*.exe
 
 # Export artifacts
 arcyn_export.json
