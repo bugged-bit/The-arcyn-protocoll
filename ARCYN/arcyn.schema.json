@@ -88,7 +88,7 @@
             "type": "array",
             "description": "Applications to launch (exe name, full path, or shell command)",
             "items": { "type": "string" },
-            "examples": [["wt.exe", "C:\\Program Files\\MyApp\\app.exe"]]
+            "examples": [["wt.exe", "/usr/local/bin/app"]]
           },
           "websites": {
             "type": "array",
@@ -100,7 +100,7 @@
             "type": "array",
             "description": "Folders to open in File Explorer",
             "items": { "type": "string" },
-            "examples": [["D:\\Projects", "C:\\Users\\me\\Documents"]]
+            "examples": [["/home/user/Projects", "/home/me/Documents"]]
           }
         },
         "required": ["name"],
