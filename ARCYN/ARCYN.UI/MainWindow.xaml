@@ -342,60 +342,60 @@
                                            Margin="6,0,10,0"
                                            Foreground="{StaticResource TextPrimaryBrush}"
                                            VerticalAlignment="Center" />
-                                <TextBlock Grid.Column="2"
-                                           x:Name="ModeCountRun"
-                                           FontSize="8"
-                                           Margin="0,0,10,0"
-                                           Foreground="{StaticResource TextDimBrush}"
-                                           VerticalAlignment="Center"
-                                           Text="00" />
-                                <TextBlock Grid.Column="3"
-                                           x:Name="PhaseLabel"
-                                           FontSize="8"
-                                           Margin="0,0,14,0"
-                                           Foreground="{StaticResource AccentBrush}"
-                                           VerticalAlignment="Center"
-                                           Text="BOOT" />
-                                <TextBlock Grid.Column="4"
-                                           x:Name="HeaderCpu"
-                                           FontSize="8"
-                                           Margin="0,0,10,0"
-                                           Foreground="{StaticResource TextDimBrush}"
-                                           VerticalAlignment="Center"
-                                           Text="CPU --%" />
-                                <TextBlock Grid.Column="5"
-                                           x:Name="HeaderRam"
-                                           FontSize="8"
-                                           Margin="0,0,10,0"
-                                           Foreground="{StaticResource TextDimBrush}"
-                                           VerticalAlignment="Center"
-                                           Text="RAM --%" />
-                                <TextBlock Grid.Column="6"
-                                           x:Name="HeaderUptime"
-                                           FontSize="8"
-                                           Margin="0,0,10,0"
-                                           Foreground="{StaticResource TextDimBrush}"
-                                           VerticalAlignment="Center"
-                                           Text="UP 00:00:00" />
-                                <TextBlock Grid.Column="7"
-                                           x:Name="HeaderSys"
-                                           FontSize="8"
-                                           FontWeight="Bold"
-                                           Margin="0,0,10,0"
-                                           Foreground="{StaticResource AccentBrightBrush}"
-                                           VerticalAlignment="Center"
-                                           Text="ONLINE" />
+                                 <TextBlock Grid.Column="2"
+                                            x:Name="ModeCountRun"
+                                            FontSize="8"
+                                            Margin="0,0,10,0"
+                                            Foreground="{StaticResource TextDimBrush}"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding ModeCount}" />
+                                 <TextBlock Grid.Column="3"
+                                            x:Name="PhaseLabel"
+                                            FontSize="8"
+                                            Margin="0,0,14,0"
+                                            Foreground="{StaticResource AccentBrush}"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding PhaseLabel}" />
+                                 <TextBlock Grid.Column="4"
+                                            x:Name="HeaderCpu"
+                                            FontSize="8"
+                                            Margin="0,0,10,0"
+                                            Foreground="{StaticResource TextDimBrush}"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding HeaderCpu}" />
+                                 <TextBlock Grid.Column="5"
+                                            x:Name="HeaderRam"
+                                            FontSize="8"
+                                            Margin="0,0,10,0"
+                                            Foreground="{StaticResource TextDimBrush}"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding HeaderRam}" />
+                                 <TextBlock Grid.Column="6"
+                                            x:Name="HeaderUptime"
+                                            FontSize="8"
+                                            Margin="0,0,10,0"
+                                            Foreground="{StaticResource TextDimBrush}"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding HeaderUptime}" />
+                                 <TextBlock Grid.Column="7"
+                                            x:Name="HeaderSys"
+                                            FontSize="8"
+                                            FontWeight="Bold"
+                                            Margin="0,0,10,0"
+                                            Foreground="{StaticResource AccentBrightBrush}"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding HeaderSys}" />
                                 <Rectangle Grid.Column="8"
                                            Height="1"
                                            Fill="{StaticResource BorderSubtleBrush}"
                                            VerticalAlignment="Center"
                                            Margin="0,0,10,0" />
-                                <TextBlock Grid.Column="9"
-                                           x:Name="TimeDisplay"
-                                           FontSize="8"
-                                           Foreground="{StaticResource TextDimBrush}"
-                                           VerticalAlignment="Center"
-                                           Text="00:00:00" />
+                                 <TextBlock Grid.Column="9"
+                                            x:Name="TimeDisplay"
+                                            FontSize="8"
+                                            Foreground="{StaticResource TextDimBrush}"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding TimeDisplay}" />
                             </Grid>
                         </Border>
 
@@ -453,12 +453,12 @@
                                                    Fill="{StaticResource BorderSubtleBrush}"
                                                    VerticalAlignment="Center"
                                                    Margin="0,0,8,0" />
-                                        <TextBlock Grid.Column="3"
-                                                   x:Name="LaunchTargetCount"
-                                                   FontSize="8"
-                                                   Foreground="{StaticResource TextMutedBrush}"
-                                                   VerticalAlignment="Center"
-                                                   Text="00 TARGETS" />
+                                         <TextBlock Grid.Column="3"
+                                                    x:Name="LaunchTargetCount"
+                                                    FontSize="8"
+                                                    Foreground="{StaticResource TextMutedBrush}"
+                                                    VerticalAlignment="Center"
+                                                    Text="{Binding LaunchTargetCount}" />
                                     </Grid>
 
                                     <!-- Row 1: Mode name + spinner -->
@@ -468,14 +468,14 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                            <TextBlock x:Name="LaunchModeLabel"
-                                                       FontSize="22" FontWeight="Light"
-                                                       Foreground="{StaticResource TextPrimaryBrush}"
-                                                       Text="" />
-                                            <TextBlock x:Name="LaunchSessionLabel"
-                                                       FontSize="9" Margin="0,2,0,0"
-                                                       Foreground="{StaticResource TextDimBrush}"
-                                                       Text="" />
+                                             <TextBlock x:Name="LaunchModeLabel"
+                                                        FontSize="22" FontWeight="Light"
+                                                        Foreground="{StaticResource TextPrimaryBrush}"
+                                                        Text="{Binding LaunchModeLabel}" />
+                                             <TextBlock x:Name="LaunchSessionLabel"
+                                                        FontSize="9" Margin="0,2,0,0"
+                                                        Foreground="{StaticResource TextDimBrush}"
+                                                        Text="{Binding LaunchSessionLabel}" />
                                         </StackPanel>
                                         <Grid Grid.Column="1" VerticalAlignment="Center">
                                             <Ellipse Width="36" Height="36"
@@ -511,10 +511,11 @@
                                                       VerticalScrollBarVisibility="Hidden"
                                                       HorizontalScrollBarVisibility="Disabled"
                                                       Background="Transparent">
-                                            <TextBlock x:Name="LaunchFeedText"
-                                                       FontSize="8"
-                                                       Foreground="{StaticResource TextDimBrush}"
-                                                       LineHeight="14" />
+                                             <TextBlock x:Name="LaunchFeedText"
+                                                        FontSize="8"
+                                                        Foreground="{StaticResource TextDimBrush}"
+                                                        LineHeight="14"
+                                                        Text="{Binding LaunchFeedText}" />
                                         </ScrollViewer>
                                     </Border>
 
@@ -526,30 +527,30 @@
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock x:Name="LaunchCpu"
-                                                   Grid.Column="0"
-                                                   FontSize="8"
-                                                   Foreground="{StaticResource TextDimBrush}"
-                                                   Text="CPU --%" />
-                                        <TextBlock x:Name="LaunchRam"
-                                                   Grid.Column="1"
-                                                   FontSize="8"
-                                                   Margin="10,0,0,0"
-                                                   Foreground="{StaticResource TextDimBrush}"
-                                                   Text="RAM --%" />
-                                        <TextBlock x:Name="LaunchStatus"
-                                                   Grid.Column="2"
-                                                   FontSize="9"
-                                                   FontWeight="Medium"
-                                                   HorizontalAlignment="Right"
-                                                   Foreground="{StaticResource TextPrimaryBrush}"
-                                                   Text="Launching" />
-                                        <TextBlock x:Name="LaunchProgressText"
-                                                   Grid.Column="3"
-                                                   FontSize="8"
-                                                   Margin="12,0,0,0"
-                                                   Foreground="{StaticResource AccentBrush}"
-                                                   Text="PROC 00/00" />
+                                         <TextBlock x:Name="LaunchCpu"
+                                                    Grid.Column="0"
+                                                    FontSize="8"
+                                                    Foreground="{StaticResource TextDimBrush}"
+                                                    Text="{Binding LaunchCpu}" />
+                                         <TextBlock x:Name="LaunchRam"
+                                                    Grid.Column="1"
+                                                    FontSize="8"
+                                                    Margin="10,0,0,0"
+                                                    Foreground="{StaticResource TextDimBrush}"
+                                                    Text="{Binding LaunchRam}" />
+                                         <TextBlock x:Name="LaunchStatus"
+                                                    Grid.Column="2"
+                                                    FontSize="9"
+                                                    FontWeight="Medium"
+                                                    HorizontalAlignment="Right"
+                                                    Foreground="{StaticResource TextPrimaryBrush}"
+                                                    Text="{Binding LaunchStatus}" />
+                                         <TextBlock x:Name="LaunchProgressText"
+                                                    Grid.Column="3"
+                                                    FontSize="8"
+                                                    Margin="12,0,0,0"
+                                                    Foreground="{StaticResource AccentBrush}"
+                                                    Text="{Binding LaunchProgressText}" />
                                     </Grid>
 
                                     <!-- Row 4: Segmented progress bar -->
@@ -565,9 +566,9 @@
                                                        RadiusX="1" RadiusY="1"
                                                        HorizontalAlignment="Left"
                                                        RenderTransformOrigin="0,0.5">
-                                                <Rectangle.RenderTransform>
-                                                    <ScaleTransform x:Name="LaunchProgressScale" ScaleX="0" />
-                                                </Rectangle.RenderTransform>
+                                                 <Rectangle.RenderTransform>
+                                                     <ScaleTransform x:Name="LaunchProgressScale" ScaleX="{Binding LaunchProgressScale}" />
+                                                 </Rectangle.RenderTransform>
                                             </Rectangle>
                                         </Grid>
                                     </Border>
@@ -582,11 +583,11 @@
                                                    FontSize="7"
                                                    Foreground="{StaticResource TextMutedBrush}"
                                                    Opacity="0.5" />
-                                        <TextBlock Grid.Column="1"
-                                                   x:Name="LaunchRecent"
-                                                   FontSize="7"
-                                                   Foreground="{StaticResource TextMutedBrush}"
-                                                   Text="" />
+                                         <TextBlock Grid.Column="1"
+                                                    x:Name="LaunchRecent"
+                                                    FontSize="7"
+                                                    Foreground="{StaticResource TextMutedBrush}"
+                                                    Text="{Binding LaunchRecent}" />
                                     </Grid>
                                 </Grid>
                             </Border>
@@ -603,10 +604,10 @@
                                     Background="#12000000"
                                     Padding="6,2"
                                     Margin="0,0,4,0">
-                                <TextBlock x:Name="RuntimeStrip"
-                                           FontSize="7"
-                                           Foreground="{StaticResource TextDimBrush}"
-                                           Text="RUNTIME 00:00:00" />
+                                 <TextBlock x:Name="RuntimeStrip"
+                                            FontSize="7"
+                                            Foreground="{StaticResource TextDimBrush}"
+                                            Text="{Binding RuntimeStrip}" />
                             </Border>
 
                             <Border Grid.Column="1"
@@ -614,10 +615,10 @@
                                     Background="#12000000"
                                     Padding="6,2"
                                     Margin="2,0,2,0">
-                                <TextBlock x:Name="ProcessStrip"
-                                           FontSize="7"
-                                           Foreground="{StaticResource TextDimBrush}"
-                                           Text="PROC 00  -  ACTIVE STANDBY" />
+                                 <TextBlock x:Name="ProcessStrip"
+                                            FontSize="7"
+                                            Foreground="{StaticResource TextDimBrush}"
+                                            Text="{Binding ProcessStrip}" />
                             </Border>
 
                             <Border Grid.Column="2"
@@ -625,10 +626,10 @@
                                     Background="#12000000"
                                     Padding="6,2"
                                     Margin="4,0,0,0">
-                                <TextBlock x:Name="SystemStrip"
-                                           FontSize="7"
-                                           Foreground="{StaticResource TextDimBrush}"
-                                           Text="SYS ONLINE  -  HUD STABLE" />
+                                 <TextBlock x:Name="SystemStrip"
+                                            FontSize="7"
+                                            Foreground="{StaticResource TextDimBrush}"
+                                            Text="{Binding SystemStrip}" />
                             </Border>
                         </Grid>
 
@@ -637,19 +638,20 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock x:Name="FooterHint"
-                                       Grid.Column="0"
-                                       FontSize="7"
-                                       Foreground="{StaticResource TextDimBrush}"
-                                       Opacity="0.45"
-                                       VerticalAlignment="Center"
-                                       Text="[1-3] select  -  ENTER launch  -  ESC close" />
-                            <TextBlock x:Name="FooterIdle"
-                                       Grid.Column="1"
-                                       FontSize="7"
-                                       Foreground="{StaticResource TextDimBrush}"
-                                       Opacity="0.30"
-                                       VerticalAlignment="Center" />
+                             <TextBlock x:Name="FooterHint"
+                                        Grid.Column="0"
+                                        FontSize="7"
+                                        Foreground="{StaticResource TextDimBrush}"
+                                        Opacity="0.45"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding FooterHint}" />
+                             <TextBlock x:Name="FooterIdle"
+                                        Grid.Column="1"
+                                        FontSize="7"
+                                        Foreground="{StaticResource TextDimBrush}"
+                                        Opacity="0.30"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding FooterIdle}" />
                         </Grid>
                     </Grid>
                 </Grid>
