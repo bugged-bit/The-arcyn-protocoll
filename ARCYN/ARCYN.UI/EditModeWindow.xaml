@@ -1,0 +1,90 @@
+<Window x:Class="ARCYN.UI.EditModeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Edit Mode"
+        Width="420"
+        Height="340"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        SnapsToDevicePixels="True"
+        FontFamily="{StaticResource UIFont}">
+    <Border CornerRadius="6"
+            Background="#F0080808"
+            BorderThickness="1"
+            BorderBrush="{StaticResource BorderGlowBrush}"
+            Effect="{StaticResource GlowAccentSoft}">
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="EDIT MODE"
+                       FontSize="11" FontWeight="Bold"
+                       Foreground="{StaticResource TextPrimaryBrush}"
+                       Margin="0,0,0,14"/>
+
+            <StackPanel Grid.Row="1">
+                <TextBlock Text="NAME" FontSize="8" Foreground="{StaticResource AccentBrush}" Margin="0,0,0,2"/>
+                <TextBox x:Name="NameInput"
+                         FontSize="12" Foreground="{StaticResource TextPrimaryBrush}"
+                         Background="#E6080808" BorderBrush="{StaticResource BorderSubtleBrush}"
+                         BorderThickness="1" Padding="8,4" Height="28"
+                         CaretBrush="{StaticResource AccentBrightBrush}"/>
+
+                <TextBlock Text="DESCRIPTION" FontSize="8" Foreground="{StaticResource AccentBrush}" Margin="0,10,0,2"/>
+                <TextBox x:Name="DescInput"
+                         FontSize="12" Foreground="{StaticResource TextPrimaryBrush}"
+                         Background="#E6080808" BorderBrush="{StaticResource BorderSubtleBrush}"
+                         BorderThickness="1" Padding="8,4" Height="28"
+                         CaretBrush="{StaticResource AccentBrightBrush}"/>
+
+                <TextBlock Text="ACCENT COLOR" FontSize="8" Foreground="{StaticResource AccentBrush}" Margin="0,10,0,2"/>
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                    <RadioButton x:Name="ColorRed" GroupName="Accent" IsChecked="True" ToolTip="Classic Red">
+                        <RadioButton.Content><Ellipse Width="18" Height="18" Fill="#D64545" Margin="1"/></RadioButton.Content>
+                    </RadioButton>
+                    <RadioButton x:Name="ColorBlue" GroupName="Accent" Margin="6,0,0,0" ToolTip="Cyber Blue">
+                        <RadioButton.Content><Ellipse Width="18" Height="18" Fill="#4580D6" Margin="1"/></RadioButton.Content>
+                    </RadioButton>
+                    <RadioButton x:Name="ColorGreen" GroupName="Accent" Margin="6,0,0,0" ToolTip="Matrix Green">
+                        <RadioButton.Content><Ellipse Width="18" Height="18" Fill="#45D680" Margin="1"/></RadioButton.Content>
+                    </RadioButton>
+                    <RadioButton x:Name="ColorOrange" GroupName="Accent" Margin="6,0,0,0" ToolTip="Phosphor Orange">
+                        <RadioButton.Content><Ellipse Width="18" Height="18" Fill="#D6A045" Margin="1"/></RadioButton.Content>
+                    </RadioButton>
+                    <RadioButton x:Name="ColorPurple" GroupName="Accent" Margin="6,0,0,0" ToolTip="Void Purple">
+                        <RadioButton.Content><Ellipse Width="18" Height="18" Fill="#A045D6" Margin="1"/></RadioButton.Content>
+                    </RadioButton>
+                </StackPanel>
+            </StackPanel>
+
+            <Grid Grid.Row="2" Margin="0,14,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="1" CornerRadius="3" BorderThickness="1"
+                        BorderBrush="{StaticResource BorderSubtleBrush}" Margin="0,0,8,0">
+                    <Button Content="Cancel"
+                            FontSize="9" FontWeight="SemiBold" Height="30" Padding="16,0" Cursor="Hand"
+                            Foreground="{StaticResource TextDimBrush}"
+                            Background="#18000000" BorderThickness="0"
+                            Click="Cancel_Click"/>
+                </Border>
+                <Border Grid.Column="2" CornerRadius="3" Background="{StaticResource AccentBrightBrush}">
+                    <Button Content="Save"
+                            FontSize="9" FontWeight="SemiBold" Height="30" Padding="16,0" Cursor="Hand"
+                            Foreground="#0A0A0A" Background="Transparent" BorderThickness="0"
+                            Click="Save_Click"/>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

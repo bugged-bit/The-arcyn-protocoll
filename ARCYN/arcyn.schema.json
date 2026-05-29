@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ARCYN Config",
+  "description": "Configuration schema for the ARCYN tactical workspace launcher",
+  "type": "object",
+  "properties": {
+    "theme": {
+      "type": "object",
+      "description": "Visual theme settings",
+      "properties": {
+        "accent": {
+          "type": "string",
+          "description": "Accent color in hex format (e.g. #D64545)",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#D64545"
+        },
+        "glow_opacity": {
+          "type": "number",
+          "description": "Ambient glow opacity (0.0 - 1.0)",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.28
+        },
+        "scanlines": {
+          "type": "boolean",
+          "description": "Show CRT scanline overlay",
+          "default": true
+        },
+        "animations": {
+          "type": "boolean",
+          "description": "Enable animations and transitions",
+          "default": true
+        },
+        "reduced_effects": {
+          "type": "boolean",
+          "description": "Disable particles, cursor trail, ambient glow, scanlines, and boot animation (for low-end PCs)",
+          "default": false
+        },
+        "compact_mode": {
+          "type": "boolean",
+          "description": "Compact card sizing for more modes visible at once",
+          "default": false
+        }
+      }
+    },
+    "behavior": {
+      "type": "object",
+      "description": "App behavior settings",
+      "properties": {
+        "idle_timeout_seconds": {
+          "type": "integer",
+          "description": "Seconds of inactivity before auto-close (0 to disable)",
+          "minimum": 0,
+          "default": 10
+        },
+        "always_on_top": {
+          "type": "boolean",
+          "description": "Keep window always on top",
+          "default": true
+        },
+        "close_on_launch": {
+          "type": "boolean",
+          "description": "Close ARCYN after launching a mode",
+          "default": true
+        }
+      }
+    },
+    "modes": {
+      "type": "array",
+      "description": "List of workspace modes",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Mode display name (e.g. CODE, DESIGN, STUDY)"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short description shown below the name"
+          },
+          "accent": {
+            "type": "string",
+            "description": "Per-mode accent color override (optional)",
+            "pattern": "^#[0-9A-Fa-f]{6}$"
+          },
+          "apps": {
+            "type": "array",
+            "description": "Applications to launch (exe name, full path, or shell command)",
+            "items": { "type": "string" },
+            "examples": [["wt.exe", "C:\\Program Files\\MyApp\\app.exe"]]
+          },
+          "websites": {
+            "type": "array",
+            "description": "Websites to open in default browser",
+            "items": { "type": "string", "format": "uri" },
+            "examples": [["https://github.com", "https://chatgpt.com"]]
+          },
+          "folders": {
+            "type": "array",
+            "description": "Folders to open in File Explorer",
+            "items": { "type": "string" },
+            "examples": [["D:\\Projects", "C:\\Users\\me\\Documents"]]
+          }
+        },
+        "required": ["name"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["modes"],
+  "additionalProperties": false
+}
