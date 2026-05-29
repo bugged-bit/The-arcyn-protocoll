@@ -49,6 +49,4 @@ public sealed class AppState
         AppPhase.Closing => "CLS",
         _ => "???"
     };
-
-    public bool IsActive => Phase != AppPhase.Closing;
 }
