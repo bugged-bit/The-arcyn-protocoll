@@ -17,7 +17,7 @@ Thanks for your interest! ARCYN is a lightweight project — contributions are w
 
 ## Code conventions
 
-- **Language**: C# 12, .NET 8, WPF (Windows Presentation Foundation)
+- **Language**: C# 12, .NET 8, WPF
 - **Style**: Follow existing code — brace positions, naming, patterns
 - **No XML comments** — only `//` when the "why" isn't obvious
 - **No personal paths** — all config must be user-defined in `arcyn.json`
@@ -26,7 +26,7 @@ Thanks for your interest! ARCYN is a lightweight project — contributions are w
 ## Project structure
 
 ```
-ARCYN.UI/          — Main Windows UI (WPF)
+ARCYN.UI/          — Main WPF UI (WPF)
   App.xaml(.cs)          — Startup + error handling
   Program.cs             — Entry point
   MainWindow.xaml(.cs)   — HUD window + input routing

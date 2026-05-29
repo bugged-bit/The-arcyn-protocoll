@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.6.0] - 2026-05-29
+
+### Added
+- First-run setup wizard with guided configuration
+- CLI `--setup` flag for headless/terminal configuration
+- Import/Export config for sharing between machines
+- Telemetry display (live CPU/RAM monitoring)
+- Global hotkey support (`Alt+Shift+D`)
+- Per-mode accent color customization
+- Right-click context menu (move up/down, duplicate, edit)
+- Reduced effects mode for low-end systems
+- Compact mode for smaller card sizing
+
+### Changed
+- Platform references standardized to Linux-first terminology
+- Config path defaults to `~/.config/ARCYN/arcyn.json`
+
+### Technical
+- Migrated previous entries to 1.5.1 release
+
 ## [1.5.1] - 2026-05-28
 
 ### Added
@@ -23,4 +43,4 @@
 ### Technical
 - Migrated to local JSON config (no database, no cloud services)
 - WPF UI with .NET 8
-- Windows-native workspace launcher (ARCYN)
+- Native workspace launcher (ARCYN)
