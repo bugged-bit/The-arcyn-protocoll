@@ -16,8 +16,6 @@ public sealed class RenderService : IDisposable
 
     public void Subscribe(ISubscriber subscriber) => _subscribers.Add(subscriber);
 
-    public void Unsubscribe(ISubscriber subscriber) => _subscribers.Remove(subscriber);
-
     public void Start()
     {
         if (_running) return;
