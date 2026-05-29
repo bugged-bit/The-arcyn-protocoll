@@ -22,5 +22,5 @@
 
 ### Technical
 - Migrated to local JSON config (no database, no cloud services)
-- Avalonia UI with .NET 8
-- Linux-native workspace launcher (ARCYN)
+- WPF UI with .NET 8
+- Windows-native workspace launcher (ARCYN)
