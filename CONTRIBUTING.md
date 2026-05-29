@@ -12,7 +12,7 @@ Thanks for your interest! ARCYN is a lightweight project — contributions are w
 1. Fork the repo
 2. Create a branch: `git checkout -b feature/your-feature`
 3. Make changes
-4. Build: `dotnet build ARCYN/ARCYN.Avalonia -c Release`
+4. Build: `dotnet build ARCYN/ARCYN.UI -c Release`
 5. Submit a PR
 
 ## Code conventions
@@ -26,7 +26,7 @@ Thanks for your interest! ARCYN is a lightweight project — contributions are w
 ## Project structure
 
 ```
-ARCYN.Avalonia/          — Main Linux UI (Avalonia)
+ARCYN.UI/          — Main Linux UI (Avalonia)
   App.xaml(.cs)          — Startup + error handling
   Program.cs             — Entry point
   MainWindow.xaml(.cs)   — HUD window + input routing
@@ -46,20 +46,20 @@ ARCYN.Platform/          — Platform-specific implementations
 ### Debug build
 
 ```bash
-dotnet build ARCYN/ARCYN.Avalonia -c Debug
+dotnet build ARCYN/ARCYN.UI -c Debug
 ```
 
 ### Release build
 
 ```bash
-dotnet build ARCYN/ARCYN.Avalonia -c Release
+dotnet build ARCYN/ARCYN.UI -c Release
 ```
 
 ### Self-contained publish (portable binary)
 
 ```bash
-dotnet publish ARCYN/ARCYN.Avalonia -c Release -r linux-x64 --self-contained true
-# Output: ARCYN/ARCYN.Avalonia/bin/Release/net8.0/linux-x64/publish/ARCYN
+dotnet publish ARCYN/ARCYN.UI -c Release -r linux-x64 --self-contained true
+# Output: ARCYN/ARCYN.UI/bin/Release/net8.0/linux-x64/publish/ARCYN
 ```
 
 ### Packaging for distribution
@@ -67,7 +67,7 @@ dotnet publish ARCYN/ARCYN.Avalonia -c Release -r linux-x64 --self-contained tru
 **AppImage** — use `dotnet publish` then bundle with [AppImageKit](https://appimage.org/):
 
 ```bash
-dotnet publish ARCYN/ARCYN.Avalonia -c Release -r linux-x64 --self-contained true
+dotnet publish ARCYN/ARCYN.UI -c Release -r linux-x64 --self-contained true
 # Then wrap the publish directory in an AppDir and run appimagetool
 ```
 
@@ -88,14 +88,14 @@ snapcraft
 **Debian package (.deb)**:
 
 ```bash
-dotnet publish ARCYN/ARCYN.Avalonia -c Release -r linux-x64 --self-contained true
+dotnet publish ARCYN/ARCYN.UI -c Release -r linux-x64 --self-contained true
 # Use dpkg-deb to package the publish directory with proper DEBIAN/control
 ```
 
 **RPM package**:
 
 ```bash
-dotnet publish ARCYN/ARCYN.Avalonia -c Release -r linux-x64 --self-contained true
+dotnet publish ARCYN/ARCYN.UI -c Release -r linux-x64 --self-contained true
 # Use rpmbuild to package the publish directory
 ```
 
@@ -103,7 +103,7 @@ dotnet publish ARCYN/ARCYN.Avalonia -c Release -r linux-x64 --self-contained tru
 
 - One feature/fix per PR
 - Rebase on main before submitting
-- Ensure `dotnet build ARCYN/ARCYN.Avalonia -c Release` passes with 0 errors, 0 warnings
+- Ensure `dotnet build ARCYN/ARCYN.UI -c Release` passes with 0 errors, 0 warnings
 - No breaking changes to `arcyn.json` schema without migration support
 - Test manually: run the app, create a mode, launch it, verify keyboard nav
 
