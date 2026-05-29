@@ -4,12 +4,8 @@
     <Color x:Key="Accent">#D64545</Color>
     <Color x:Key="AccentBright">#F08080</Color>
     <Color x:Key="AccentLight">#F7A0A0</Color>
-    <Color x:Key="AccentDark">#8C2020</Color>
     <Color x:Key="AccentGlow">#88D64545</Color>
-    <Color x:Key="BgSurface">#EC080808</Color>
-    <Color x:Key="BgPanel">#E9090909</Color>
     <Color x:Key="TextPrimary">#FBFFFFFF</Color>
-    <Color x:Key="TextSecondary">#EEFFFFFF</Color>
     <Color x:Key="TextBright">#FFFFFFFF</Color>
     <Color x:Key="TextDim">#AAD64545</Color>
     <Color x:Key="TextMuted">#66D64545</Color>
@@ -17,16 +13,12 @@
     <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource Accent}" />
     <SolidColorBrush x:Key="AccentBrightBrush" Color="{StaticResource AccentBright}" />
     <SolidColorBrush x:Key="AccentLightBrush" Color="{StaticResource AccentLight}" />
-    <SolidColorBrush x:Key="AccentDarkBrush" Color="{StaticResource AccentDark}" />
     <SolidColorBrush x:Key="AccentGlowBrush" Color="{StaticResource AccentGlow}" />
     <SolidColorBrush x:Key="AccentBorderBrush" Color="#33D64545" />
-    <SolidColorBrush x:Key="AccentBorderGlowBrush" Color="#44D64545" />
     <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimary}" />
-    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondary}" />
     <SolidColorBrush x:Key="TextBrightBrush" Color="{StaticResource TextBright}" />
     <SolidColorBrush x:Key="TextDimBrush" Color="{StaticResource TextDim}" />
     <SolidColorBrush x:Key="TextMutedBrush" Color="{StaticResource TextMuted}" />
-    <SolidColorBrush x:Key="BgPanelBrush" Color="{StaticResource BgPanel}" />
 
     <SolidColorBrush x:Key="BorderSubtleBrush" Color="#22D64545" />
     <SolidColorBrush x:Key="BorderGlowBrush" Color="#55D64545" />
