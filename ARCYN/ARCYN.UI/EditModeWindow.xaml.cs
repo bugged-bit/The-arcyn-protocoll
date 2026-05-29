@@ -1,5 +1,5 @@
 using System.Windows;
-using ARCYN.UI.Models;
+using ARCYN.Core.Models;
 
 namespace ARCYN.UI;
 

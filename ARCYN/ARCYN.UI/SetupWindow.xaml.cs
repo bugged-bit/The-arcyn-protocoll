@@ -6,7 +6,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Interop;
 using System.Windows.Threading;
-using ARCYN.UI.Models;
+using ARCYN.Core.Models;
+using ARCYN.Core.Services;
 using ARCYN.UI.Services;
 
 

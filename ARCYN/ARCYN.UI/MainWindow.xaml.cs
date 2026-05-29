@@ -9,7 +9,8 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using ARCYN.UI.Models;
+using ARCYN.Core.Models;
+using ARCYN.Core.Services;
 using ARCYN.UI.Services;
 
 namespace ARCYN.UI;
@@ -65,7 +66,7 @@ public partial class MainWindow : Window, IDisposable, RenderService.ISubscriber
     {
         InitializeComponent();
 
-        _modes = new ModeService(_state);
+        _modes = new ModeService();
         _log = new LogService();
         _render = new RenderService();
         _lifeCts = new CancellationTokenSource();

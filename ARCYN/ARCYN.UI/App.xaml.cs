@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Windows;
+using ARCYN.Core.Models;
+using ARCYN.Core.Services;
 using ARCYN.UI.Services;
 
 namespace ARCYN.UI;
@@ -120,8 +122,8 @@ public partial class App : Application
         // Headless CLI setup for terminal users
         System.Console.WriteLine("=== ARCYN Setup (CLI) ===");
 
-        var config = new Services.ConfigService();
-        var arcynConfig = new Models.ArcynConfig();
+            var config = new ConfigService();
+            var arcynConfig = new ArcynConfig();
 
         System.Console.WriteLine("Create your workspace modes.");
         System.Console.WriteLine("Press Enter with empty name to finish.\n");
@@ -140,7 +142,7 @@ public partial class App : Application
                 break;
             }
 
-            var mode = new Models.ModeConfig { Name = name };
+            var mode = new ModeConfig { Name = name };
 
             System.Console.Write("  Description: ");
             mode.Description = System.Console.ReadLine()?.Trim() ?? "";

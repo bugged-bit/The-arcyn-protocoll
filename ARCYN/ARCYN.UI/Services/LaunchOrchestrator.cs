@@ -4,7 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using ARCYN.UI.Models;
+using ARCYN.Core.Models;
+using ARCYN.Core.Services;
 using ARCYN.UI.Services;
 
 namespace ARCYN.UI.Services;
