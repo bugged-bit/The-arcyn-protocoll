@@ -8,26 +8,30 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
-
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+        include:
+          - os: windows-latest
+            project: ARCYN/ARCYN.UI/ARCYN.UI.csproj
+          - os: ubuntu-latest
+            project: ARCYN/ARCYN.Avalonia/ARCYN.Avalonia.csproj
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-
       - name: Restore
-        run: dotnet restore ARCYN/ARCYN.UI/ARCYN.UI.csproj
-
+        run: dotnet restore ${{ matrix.project }}
       - name: Build
-        run: dotnet build ARCYN/ARCYN.UI/ARCYN.UI.csproj -c Release --no-restore
-
-      - name: Publish
-        run: dotnet publish ARCYN/ARCYN.UI/ARCYN.UI.csproj -c Release --no-build -o publish
-
-      - name: Upload artifact
+        run: dotnet build ${{ matrix.project }} -c Release --no-restore -warnaserror
+      - name: Publish (if Windows)
+        if: matrix.os == 'windows-latest'
+        run: dotnet publish ${{ matrix.project }} -c Release --no-build -o publish
+      - name: Upload artifact (if Windows)
+        if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
           name: ARCYN
