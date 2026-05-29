@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -19,16 +19,16 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Restore
-        run: dotnet restore ARCYN\ARCYN.UI\ARCYN.UI.csproj
+        run: dotnet restore ARCYN/ARCYN.UI/ARCYN.UI.csproj
 
       - name: Build
-        run: dotnet build ARCYN\ARCYN.UI\ARCYN.UI.csproj -c Release --no-restore
+        run: dotnet build ARCYN/ARCYN.UI/ARCYN.UI.csproj -c Release --no-restore
 
       - name: Publish
-        run: dotnet publish ARCYN\ARCYN.UI\ARCYN.UI.csproj -c Release --no-build -o publish
+        run: dotnet publish ARCYN/ARCYN.UI/ARCYN.UI.csproj -c Release --no-build -o publish
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ARCYN
-          path: publish\ARCYN.exe
+          path: publish/ARCYN
