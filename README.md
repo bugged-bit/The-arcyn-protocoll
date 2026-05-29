@@ -34,6 +34,23 @@ ARCYN is a HUD-style launcher that opens your apps, websites, and folders togeth
 
 ---
 
+## Migration Status
+
+- [x] 1. Refactor core services – decouple UI from business logic
+- [x] 2. Remove dead code – eliminate unused XAML resources, AssemblyInfo, and orphaned methods
+- [x] 3. Consolidate duplicate utility methods – merge type converters, brush helpers
+- [x] 4. Create ARCYN.Core class‑library – shared models and services
+- [x] 5. Extract UI logic into ViewModels – MVVM pattern for WPF and Avalonia
+- [x] 6. Add Avalonia UI project – cross‑platform HUD window
+- [x] 7. Update CI pipeline – split WPF and Avalonia matrix builds
+- [x] 8. Clean up .csproj files – remove unused packages, centralise versions
+- [ ] 9. Update README with migration status checklist – keep stakeholders informed
+- [ ] 10. Introduce xUnit test project – ensure regression coverage
+- [x] 11. Add CI step to run `dotnet build -warnaserror` – enforce code quality
+- [~] 12. Add CI step to verify app launches via Playwright – after migration
+
+---
+
 ## Prerequisites
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (required for building)
