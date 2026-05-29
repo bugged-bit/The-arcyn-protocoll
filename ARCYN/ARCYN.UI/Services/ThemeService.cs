@@ -29,21 +29,4 @@ public sealed class ThemeService
         TextPrimary = (element.TryFindResource("TextPrimaryBrush") as Brush)
             ?? Brushes.White;
     }
-
-    public static Color ParseColor(string hex)
-    {
-        try
-        {
-            return (Color)ColorConverter.ConvertFromString(hex);
-        }
-        catch
-        {
-            return Color.FromRgb(0xD6, 0x45, 0x45);
-        }
-    }
-
-    public static SolidColorBrush HexToBrush(string hex)
-    {
-        return new SolidColorBrush(ParseColor(hex));
-    }
 }
