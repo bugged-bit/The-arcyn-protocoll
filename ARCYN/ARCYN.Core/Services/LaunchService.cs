@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using ARCYN.Core.Models;
+using ARCYN.Core.Utils;
 
 namespace ARCYN.Core.Services;
 
@@ -28,7 +29,7 @@ public static class LaunchService
             psi = new ProcessStartInfo
             {
                 FileName = "explorer.exe",
-                Arguments = QuotePath(folderPath),
+                Arguments = SharedHelper.QuotePath(folderPath),
                 UseShellExecute = true,
                 WindowStyle = ProcessWindowStyle.Normal,
                 WorkingDirectory = folderPath
@@ -73,7 +74,7 @@ public static class LaunchService
             psi = new ProcessStartInfo
             {
                 FileName = "explorer.exe",
-                Arguments = QuotePath(cmd),
+                Arguments = SharedHelper.QuotePath(cmd),
                 UseShellExecute = true,
                 WindowStyle = ProcessWindowStyle.Normal,
                 WorkingDirectory = cmd
@@ -87,7 +88,7 @@ public static class LaunchService
             psi = new ProcessStartInfo
             {
                 FileName = "explorer.exe",
-                Arguments = QuotePath(cmd),
+                Arguments = SharedHelper.QuotePath(cmd),
                 UseShellExecute = true,
                 WindowStyle = ProcessWindowStyle.Normal,
                 WorkingDirectory = cmd
@@ -178,8 +179,4 @@ public static class LaunchService
         return AppContext.BaseDirectory;
     }
 
-    public static string QuotePath(string path)
-    {
-        return path.Contains(' ') ? $"\"{path}\"" : path;
-    }
 }
