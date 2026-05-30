@@ -69,8 +69,17 @@ ARCYN is a HUD-style launcher that opens your apps, websites, and folders togeth
 
 ```bash
 git clone https://github.com/bugged-bit/ARCYN.git
+
+# Windows (WPF)
 cd ARCYN/ARCYN.UI
 dotnet restore
+dotnet build -c Release
+dotnet publish -c Release --self-contained true
+
+# Linux (Avalonia)
+cd ARCYN/ARCYN.Avalonia
+dotnet restore
+dotnet build -c Release
 dotnet publish -c Release --self-contained true
 ```
 
