@@ -25,14 +25,16 @@ jobs:
           dotnet-version: 8.0.x
       - name: Restore
         run: dotnet restore ${{ matrix.project }}
-        - name: Build
-          run: dotnet build ${{ matrix.project }} -c Release --no-restore -warnaserror
-        - name: Install Playwright browsers
-          run: npx playwright install
-        - name: UI verification with Playwright
-          env:
-            APP_PATH: ${{ matrix.os == 'windows-latest' && 'publish/ARCYN/ARCYN.exe' || 'publish/ARCYN.Avalonia/ARCYN.Avalonia' }}
-          run: npx playwright test tests/ui.test.ts --project=${{ matrix.os }}
+      - name: Build
+        run: dotnet build ${{ matrix.project }} -c Release --no-restore -warnaserror
+      - name: Run unit tests
+        run: dotnet test ARCYN/tests/ARCYN.Core.Tests/ARCYN.Core.Tests.csproj -c Release
+      - name: Install Playwright browsers
+        run: npx playwright install
+      - name: UI verification with Playwright
+        env:
+          APP_PATH: ${{ matrix.os == 'windows-latest' && 'publish/ARCYN/ARCYN.exe' || 'publish/ARCYN.Avalonia/ARCYN.Avalonia' }}
+        run: npx playwright test tests/ui.test.ts --project=${{ matrix.os }}
       - name: Publish (if Windows)
         if: matrix.os == 'windows-latest'
         run: dotnet publish ${{ matrix.project }} -c Release --no-build -o publish
