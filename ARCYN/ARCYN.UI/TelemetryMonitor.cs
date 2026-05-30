@@ -1,12 +1,16 @@
-using System.Diagnostics;
-
 namespace ARCYN.UI;
 
+/// <summary>
+/// Monitors CPU and RAM usage. On Windows uses PerformanceCounter/WMI;
+/// on other platforms returns stubs.
+/// </summary>
 public sealed class TelemetryMonitor : IDisposable
 {
-    private PerformanceCounter? _cpuCounter;
-    private PerformanceCounter? _ramAvailCounter;
+#if WINDOWS
+    private System.Diagnostics.PerformanceCounter? _cpuCounter;
+    private System.Diagnostics.PerformanceCounter? _ramAvailCounter;
     private readonly double _totalRamMb;
+#endif
     private bool _disposed;
 
     public float CpuPercent { get; private set; }
@@ -14,9 +18,10 @@ public sealed class TelemetryMonitor : IDisposable
 
     public TelemetryMonitor()
     {
+#if WINDOWS
         try
         {
-            _cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+            _cpuCounter = new System.Diagnostics.PerformanceCounter("Processor", "% Processor Time", "_Total");
             _ = _cpuCounter.NextValue();
         }
         catch
@@ -26,7 +31,7 @@ public sealed class TelemetryMonitor : IDisposable
 
         try
         {
-            _ramAvailCounter = new PerformanceCounter("Memory", "Available MBytes");
+            _ramAvailCounter = new System.Diagnostics.PerformanceCounter("Memory", "Available MBytes");
             _ = _ramAvailCounter.NextValue();
         }
         catch
@@ -35,8 +40,10 @@ public sealed class TelemetryMonitor : IDisposable
         }
 
         _totalRamMb = GetTotalRamMb();
+#endif
     }
 
+#if WINDOWS
     private static double GetTotalRamMb()
     {
         try
@@ -49,10 +56,12 @@ public sealed class TelemetryMonitor : IDisposable
         catch { }
         return 16384;
     }
+#endif
 
     public void Sample()
     {
         if (_disposed) return;
+#if WINDOWS
         try
         {
             if (_cpuCounter != null)
@@ -65,14 +74,17 @@ public sealed class TelemetryMonitor : IDisposable
             }
         }
         catch { }
+#endif
     }
 
     public void Dispose()
     {
         if (_disposed) return;
         _disposed = true;
+#if WINDOWS
         _cpuCounter?.Dispose();
         _ramAvailCounter?.Dispose();
+#endif
         GC.SuppressFinalize(this);
     }
 }

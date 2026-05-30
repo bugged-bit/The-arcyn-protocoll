@@ -483,7 +483,6 @@ public sealed class MainWindowViewModel : BaseViewModel, IDisposable
         finally
         {
             _isLaunching = false;
-            CommandManager.InvalidateRequerySuggested();
         }
     }
 

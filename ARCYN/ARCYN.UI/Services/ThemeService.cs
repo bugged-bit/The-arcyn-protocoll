@@ -1,5 +1,7 @@
+#if WINDOWS
 using System.Windows;
 using System.Windows.Media;
+#endif
 
 namespace ARCYN.UI.Services;
 
@@ -16,6 +18,7 @@ public sealed class ThemeService
 
     public static IReadOnlyDictionary<string, string> Presets => PresetAccents;
 
+#if WINDOWS
     public Brush AccentBright { get; private set; } = Brushes.White;
     public Brush AccentLight { get; private set; } = Brushes.White;
     public Brush TextPrimary { get; private set; } = Brushes.White;
@@ -29,4 +32,5 @@ public sealed class ThemeService
         TextPrimary = (element.TryFindResource("TextPrimaryBrush") as Brush)
             ?? Brushes.White;
     }
+#endif
 }

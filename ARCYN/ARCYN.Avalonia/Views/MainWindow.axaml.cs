@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Input;
-using ARCYN.UI.ViewModels;
+using ARCYN.Avalonia.ViewModels;
 
 namespace ARCYN.Avalonia.Views;
 

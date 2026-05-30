@@ -28,11 +28,13 @@ public abstract class BaseViewModel : INotifyPropertyChanged
 
 /// <summary>
 /// A simple relay command that delegates execution to delegates.
+/// Uses a local event instead of WPF's CommandManager for cross-platform support.
 /// </summary>
 public sealed class RelayCommand : ICommand
 {
     private readonly Action<object?> _execute;
     private readonly Func<object?, bool>? _canExecute;
+    private EventHandler? _canExecuteChanged;
 
     public RelayCommand(Action<object?> execute, Func<object?, bool>? canExecute = null)
     {
@@ -47,8 +49,8 @@ public sealed class RelayCommand : ICommand
 
     public event EventHandler? CanExecuteChanged
     {
-        add => CommandManager.RequerySuggested += value;
-        remove => CommandManager.RequerySuggested -= value;
+        add => _canExecuteChanged += value;
+        remove => _canExecuteChanged -= value;
     }
 
     public bool CanExecute(object? parameter) => _canExecute?.Invoke(parameter) ?? true;
@@ -57,12 +59,14 @@ public sealed class RelayCommand : ICommand
 
 /// <summary>
 /// A relay command that supports async execution.
+/// Uses a local event instead of WPF's CommandManager for cross-platform support.
 /// </summary>
 public sealed class AsyncRelayCommand : ICommand
 {
     private readonly Func<object?, Task> _execute;
     private readonly Func<object?, bool>? _canExecute;
     private bool _isExecuting;
+    private EventHandler? _canExecuteChanged;
 
     public AsyncRelayCommand(Func<object?, Task> execute, Func<object?, bool>? canExecute = null)
     {
@@ -77,8 +81,8 @@ public sealed class AsyncRelayCommand : ICommand
 
     public event EventHandler? CanExecuteChanged
     {
-        add => CommandManager.RequerySuggested += value;
-        remove => CommandManager.RequerySuggested -= value;
+        add => _canExecuteChanged += value;
+        remove => _canExecuteChanged -= value;
     }
 
     public bool CanExecute(object? parameter) =>
@@ -88,7 +92,7 @@ public sealed class AsyncRelayCommand : ICommand
     {
         if (_isExecuting) return;
         _isExecuting = true;
-        CommandManager.InvalidateRequerySuggested();
+        _canExecuteChanged?.Invoke(this, EventArgs.Empty);
         try
         {
             await _execute(parameter);
@@ -96,7 +100,7 @@ public sealed class AsyncRelayCommand : ICommand
         finally
         {
             _isExecuting = false;
-            CommandManager.InvalidateRequerySuggested();
+            _canExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }
