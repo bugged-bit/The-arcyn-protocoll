@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Width="920"
         Height="490"
-        SystemDecorations="None"
+        WindowDecorations="None"
         Background="#FF0A0A0A"
         ShowInTaskbar="False"
         WindowStartupLocation="CenterScreen"
