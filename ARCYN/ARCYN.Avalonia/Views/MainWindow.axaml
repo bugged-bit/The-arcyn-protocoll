@@ -6,46 +6,26 @@
         mc:Ignorable="d"
         Width="920"
         Height="490"
-        WindowStyle="None"
+        SystemDecorations="None"
         Background="#FF0A0A0A"
         ShowInTaskbar="False"
-        
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize"
-        SnapsToDevicePixels="True"
-        TextOptions.TextFormattingMode="Display"
+        CanResize="False"
         FontFamily="{StaticResource UIFont}"
-        PreviewKeyDown="Window_PreviewKeyDown">
+        KeyDown="Window_KeyDown">
     <Window.Resources>
         <DataTemplate x:Key="ModeCardTemplate">
-                    <Button Style="{StaticResource WorkstationPanelStyle}"
-                            Click="ModeButton_Click"
-                            Tag="{Binding}"
+                    <Button Tag="{Binding}"
                             MinHeight="84"
                             Margin="0">
-                        <Button.ContextMenu>
-                            <ContextMenu Background="#F0080808"
-                                         BorderThickness="1"
-                                         BorderBrush="{StaticResource BorderSubtleBrush}"
-                                         FontFamily="{StaticResource UIFont}"
-                                         FontSize="9"
-                                         Foreground="{StaticResource TextPrimaryBrush}">
-                                <MenuItem Header="Edit" Click="MenuEdit_Click"/>
-                                <MenuItem Header="Duplicate" Click="MenuDuplicate_Click"/>
-                                <Separator Background="{StaticResource BorderSubtleBrush}" Height="1" Margin="4,2"/>
-                                <MenuItem Header="Move Up" Click="MenuMoveUp_Click"/>
-                                <MenuItem Header="Move Down" Click="MenuMoveDown_Click"/>
-                                <Separator Background="{StaticResource BorderSubtleBrush}" Height="1" Margin="4,2"/>
-                                <MenuItem Header="Delete" Click="MenuDelete_Click"/>
-                            </ContextMenu>
-                        </Button.ContextMenu>
+                        <!-- ContextMenu removed during Avalonia migration; event handlers not yet ported -->
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="28" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Border Background="{Binding Accent, Converter={StaticResource AccentBarConverter}}" CornerRadius="2,0,0,2">
+                    <Border Background="#66D64545" CornerRadius="2,0,0,2">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="{Binding IndexLabel}"
                                        FontSize="13"
@@ -175,12 +155,12 @@
         </DataTemplate>
     </Window.Resources>
 
-    <Grid x:Name="RootGrid" Background="Transparent" MouseDown="RootGrid_MouseDown">
+    <Grid x:Name="RootGrid" Background="Transparent" PointerPressed="RootGrid_PointerPressed">
         <Canvas x:Name="ParticleCanvas" IsHitTestVisible="False" />
-        <Rectangle x:Name="AmbientGlow" Style="{StaticResource AmbientGlow}" />
+        <Rectangle x:Name="AmbientGlow" Fill="#44D64545" Opacity="0.28" IsHitTestVisible="False" />
         <Rectangle x:Name="StartupFlash" Fill="#D64545" Opacity="0" IsHitTestVisible="False" />
-        <Rectangle x:Name="ScanlinesOverlay" Style="{StaticResource Scanlines}" />
-        <Rectangle Style="{StaticResource Vignette}" />
+        <Rectangle x:Name="ScanlinesOverlay" Fill="#08000000" Opacity="0.05" IsHitTestVisible="False" />
+        <Rectangle Fill="#88000000" Opacity="0.5" IsHitTestVisible="False" />
         <Canvas x:Name="TrailCanvas" IsHitTestVisible="False" Panel.ZIndex="100" />
 
         <Grid x:Name="ShellHost" Margin="16,12">
@@ -417,7 +397,7 @@
                             <Border x:Name="LaunchPanel"
                                     CornerRadius="3"
                                     Opacity="0"
-                                    Visibility="Collapsed"
+                                    IsVisible="False"
                                     BorderThickness="1"
                                     BorderBrush="{StaticResource BorderSubtleBrush}"
                                     Background="#E9080808"
@@ -485,14 +465,13 @@
                                                     <Path x:Name="SpinnerArc"
                                                           Stroke="{StaticResource AccentBrightBrush}"
                                                           StrokeThickness="2.5"
-                                                          StrokeEndLineCap="Round"
-                                                          StrokeStartLineCap="Round"
+                                                           StrokeLineCap="Round"
                                                           Width="28" Height="28"
                                                           Stretch="Uniform"
                                                           Data="M 3,14 A 11,11 0 1,1 25,14"
                                                           RenderTransformOrigin="0.5,0.5">
                                                         <Path.RenderTransform>
-                                                            <RotateTransform x:Name="SpinnerRotation" />
+                                                            <RotateTransform />
                                                         </Path.RenderTransform>
                                                     </Path>
                                                 </Canvas>
@@ -566,7 +545,7 @@
                                                        HorizontalAlignment="Left"
                                                        RenderTransformOrigin="0,0.5">
                                                 <Rectangle.RenderTransform>
-                                                    <ScaleTransform x:Name="LaunchProgressScale" ScaleX="{Binding LaunchProgressScale}" />
+                                                    <ScaleTransform ScaleX="{Binding LaunchProgressScale}" />
                                                 </Rectangle.RenderTransform>
                                             </Rectangle>
                                         </Grid>
