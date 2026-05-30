@@ -27,9 +27,6 @@ arcyn_export.json
 
 # Untracked files cleanup
 The-arcyn-proc*
-package.json
-package-lock.json
-AGENTS.md
 .local/
 share/
 # Additional cleanup entries
@@ -37,3 +34,9 @@ share/
 .test-results/
 plan.md
 **/publish/
+# IDE/OS generated files
+.vs/
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
