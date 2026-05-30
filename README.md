@@ -198,7 +198,14 @@ ARCYN/
 ## Build
 
 ```bash
+# Windows (WPF)
 cd ARCYN/ARCYN.UI
+dotnet restore
+dotnet build -c Release
+dotnet publish -c Release --self-contained true
+
+# Linux (Avalonia)
+cd ARCYN/ARCYN.Avalonia
 dotnet restore
 dotnet build -c Release
 dotnet publish -c Release --self-contained true
