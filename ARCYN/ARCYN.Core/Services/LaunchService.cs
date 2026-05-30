@@ -8,6 +8,7 @@ namespace ARCYN.Core.Services;
 
 public static class LaunchService
 {
+    private static bool IsWindows => OperatingSystem.IsWindows();
     // New robust creation – validates and normalizes before building ProcessStartInfo.
     public static bool TryPrepare(TargetItem target, out ProcessStartInfo psi, out string? error)
     {
@@ -28,7 +29,7 @@ public static class LaunchService
             }
             psi = new ProcessStartInfo
             {
-                FileName = "explorer.exe",
+                FileName = IsWindows ? "explorer.exe" : "xdg-open",
                 Arguments = SharedHelper.QuotePath(folderPath),
                 UseShellExecute = true,
                 WindowStyle = ProcessWindowStyle.Normal,
@@ -48,8 +49,8 @@ public static class LaunchService
             }
             psi = new ProcessStartInfo
             {
-                FileName = cmd,
-                Arguments = string.Empty,
+                FileName = IsWindows ? cmd : "xdg-open",
+                Arguments = IsWindows ? string.Empty : cmd,
                 UseShellExecute = true,
                 WindowStyle = ProcessWindowStyle.Normal,
                 WorkingDirectory = AppContext.BaseDirectory
@@ -73,7 +74,7 @@ public static class LaunchService
             }
             psi = new ProcessStartInfo
             {
-                FileName = "explorer.exe",
+                FileName = IsWindows ? "explorer.exe" : "xdg-open",
                 Arguments = SharedHelper.QuotePath(cmd),
                 UseShellExecute = true,
                 WindowStyle = ProcessWindowStyle.Normal,
@@ -82,12 +83,12 @@ public static class LaunchService
             return true;
         }
 
-        // Directories – open in explorer
+        // Directories – open in explorer/file-manager
         if (Directory.Exists(cmd))
         {
             psi = new ProcessStartInfo
             {
-                FileName = "explorer.exe",
+                FileName = IsWindows ? "explorer.exe" : "xdg-open",
                 Arguments = SharedHelper.QuotePath(cmd),
                 UseShellExecute = true,
                 WindowStyle = ProcessWindowStyle.Normal,
