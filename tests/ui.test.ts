@@ -15,13 +15,14 @@ test('verify ARCYN build artifact exists and is valid', () => {
   // Published .NET self-contained app should be >64 KB
   expect(stats.size).toBeGreaterThan(64 * 1024);
 
-  // PE executables start with MZ magic bytes
-  const fd = fs.openSync(resolved, 'r');
-  const buf = Buffer.alloc(2);
-  fs.readSync(fd, buf, 0, 2, 0);
-  fs.closeSync(fd);
-  const isMZ = buf[0] === 0x4d && buf[1] === 0x5a;
-  expect(isMZ).toBe(true);
+  if (process.platform === 'win32') {
+    const fd = fs.openSync(resolved, 'r');
+    const buf = Buffer.alloc(2);
+    fs.readSync(fd, buf, 0, 2, 0);
+    fs.closeSync(fd);
+    const isMZ = buf[0] === 0x4d && buf[1] === 0x5a;
+    expect(isMZ).toBe(true);
+  }
 });
 
 test('launch ARCYN binary and verify window appears', async () => {

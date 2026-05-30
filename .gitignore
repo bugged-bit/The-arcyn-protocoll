@@ -6,6 +6,7 @@ packages/
 
 # AppImage build output
 dist/
+publish/
 _publish/
 
 # Node.js / npm
@@ -31,3 +32,8 @@ package-lock.json
 AGENTS.md
 .local/
 share/
+# Additional cleanup entries
+.claude/
+.test-results/
+plan.md
+**/publish/

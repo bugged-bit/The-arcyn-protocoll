@@ -17,13 +17,9 @@
     <ApplicationManifest Condition="$(TargetFramework.EndsWith('windows'))">app.manifest</ApplicationManifest>
   </PropertyGroup>
 
-  <ItemGroup Condition="$(TargetFramework.EndsWith('windows'))">
-    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.1" />
-    <PackageReference Include="System.Management" Version="9.0.0" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +35,7 @@
     <Compile Remove="**/*.xaml.cs" />
     <Compile Remove="ParticleEngine.cs" />
     <Compile Remove="NativeMethods.cs" />
+    <Compile Remove="TelemetryMonitor.cs" />
     <Compile Remove="Services\AnimationService.cs" />
     <Compile Remove="Services\RenderService.cs" />
     <Compile Remove="ViewModels\MainWindowViewModel.cs" />

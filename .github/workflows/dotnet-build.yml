@@ -31,16 +31,25 @@ jobs:
         run: dotnet test ARCYN/tests/ARCYN.Core.Tests/ARCYN.Core.Tests.csproj -c Release
       - name: Install Playwright browsers
         run: npx playwright install
-      - name: UI verification with Playwright
-        env:
-          APP_PATH: ${{ matrix.os == 'windows-latest' && 'publish/ARCYN/ARCYN.exe' || 'publish/ARCYN.Avalonia/ARCYN.Avalonia' }}
-        run: npx playwright test tests/ui.test.ts --project=${{ matrix.os }}
-      - name: Publish (if Windows)
+      - name: Publish (Windows)
         if: matrix.os == 'windows-latest'
         run: dotnet publish ${{ matrix.project }} -c Release --no-build -o publish
-      - name: Upload artifact (if Windows)
+      - name: Publish (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: dotnet publish ${{ matrix.project }} -c Release --no-build -o publish
+      - name: UI verification with Playwright
+        env:
+          APP_PATH: ${{ matrix.os == 'windows-latest' && 'publish/ARCYN.UI.exe' || 'publish/ARCYN.Avalonia' }}
+        run: npx playwright test tests/ui.test.ts
+      - name: Upload artifact (Windows)
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
           name: ARCYN
-          path: publish/ARCYN
+          path: publish
+      - name: Upload artifact (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ARCYN-Linux
+          path: publish
