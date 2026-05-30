@@ -44,10 +44,10 @@ ARCYN is a HUD-style launcher that opens your apps, websites, and folders togeth
 - [x] 6. Add Avalonia UI project – cross‑platform HUD window
 - [x] 7. Update CI pipeline – split WPF and Avalonia matrix builds
 - [x] 8. Clean up .csproj files – remove unused packages, centralise versions
-- [ ] 9. Update README with migration status checklist – keep stakeholders informed
-- [ ] 10. Introduce xUnit test project – ensure regression coverage
+- [x] 9. Update README with migration status checklist – keep stakeholders informed
+- [x] 10. Introduce xUnit test project – ensure regression coverage
 - [x] 11. Add CI step to run `dotnet build -warnaserror` – enforce code quality
-- [~] 12. Add CI step to verify app launches via Playwright – after migration
+- [x] 12. Add CI step to verify app launches via Playwright – after migration
 
 ---
 
