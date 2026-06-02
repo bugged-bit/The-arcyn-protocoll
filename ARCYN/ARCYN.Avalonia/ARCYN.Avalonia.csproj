@@ -4,8 +4,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <!-- Compiled bindings disabled during WPF→Avalonia migration; add x:DataType when ready -->
+    <AssemblyName>ARCYN</AssemblyName>
+    <RootNamespace>ARCYN.Avalonia</RootNamespace>
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+    <!-- Compiled bindings disabled until all bindings have explicit x:DataType metadata. -->
     <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
 
@@ -22,11 +27,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ARCYN.Core\ARCYN.Core.csproj" />
-    <ProjectReference Include="..\ARCYN.UI\ARCYN.UI.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Using Include="ARCYN.UI" />
-    <Using Include="ARCYN.UI.ViewModels" />
   </ItemGroup>
 </Project>

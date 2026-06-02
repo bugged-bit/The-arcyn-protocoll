@@ -1,116 +1,64 @@
-# Contributing to ARCYN
+# Contributing To ARCYN
 
-Thanks for your interest! ARCYN is a lightweight project — contributions are welcome but keep it simple.
+ARCYN is a Linux-only .NET 8 Avalonia app. Keep contributions focused, documented, and easy for a new Linux user to run.
 
 ## Prerequisites
 
-- **Linux** (any distro with .NET 8 support)
-- **[.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)** (install via your package manager or dotnet.microsoft.com)
+- Linux x64
+- .NET 8 SDK
+- `xdg-open`
+- Node.js 18 or newer only if you work on the optional UI smoke test
 
-## Getting started
-
-1. Fork the repo
-2. Create a branch: `git checkout -b feature/your-feature`
-3. Make changes
-4. Build: `dotnet build ARCYN/ARCYN.UI -c Release`
-5. Submit a PR
-
-## Code conventions
-
-- **Language**: C# 12, .NET 8, WPF
-- **Style**: Follow existing code — brace positions, naming, patterns
-- **No XML comments** — only `//` when the "why" isn't obvious
-- **No personal paths** — all config must be user-defined in `arcyn.json`
-- **One concern per file** — services for logic, XAML for UI, models for data
-
-## Project structure
-
-```
-ARCYN.UI/          — Main WPF UI (WPF)
-  App.xaml(.cs)          — Startup + error handling
-  Program.cs             — Entry point
-  MainWindow.xaml(.cs)   — HUD window + input routing
-  Services/              — UI-level services
-ARCYN.Core/              — Shared business logic
-  Models/                — Config and mode data models
-  Services/              — Config, mode, launch, and logging services
-  Abstractions/          — Interfaces for platform abstraction
-ARCYN.Platform/          — Platform-specific implementations
-  ConfigPathProvider.cs  — XDG-compliant config paths (~/.config/arcyn/)
-  LinuxPlatformLauncher.cs — xdg-open / gio launcher
-  ProcessExecutor.cs     — Process start helpers
-```
-
-## Building and packaging
-
-### Debug build
+## First-Time Setup
 
 ```bash
-dotnet build ARCYN/ARCYN.UI -c Debug
+git clone https://github.com/bugged-bit/ARCYN.git
+cd ARCYN
+chmod +x scripts/*.sh
+./scripts/setup-linux.sh
 ```
 
-### Release build
+## Development Commands
 
 ```bash
-dotnet build ARCYN/ARCYN.UI -c Release
+./scripts/run-linux.sh
+./scripts/test-linux.sh
+./scripts/publish-linux.sh
 ```
 
-### Self-contained publish (portable binary)
+Manual commands:
 
 ```bash
-dotnet publish ARCYN/ARCYN.UI -c Release -r linux-x64 --self-contained true
-# Output: ARCYN/ARCYN.UI/bin/Release/net8.0/linux-x64/publish/ARCYN
+dotnet restore ARCYN/ARCYN.sln
+dotnet build ARCYN/ARCYN.sln -c Release
+dotnet test ARCYN/ARCYN.sln -c Release
+dotnet publish ARCYN/ARCYN.Avalonia/ARCYN.Avalonia.csproj -c Release -r linux-x64 --self-contained true -o dist/ARCYN-linux-x64
 ```
 
-### Packaging for distribution
+## Code Guidelines
 
-**AppImage** — use `dotnet publish` then bundle with [AppImageKit](https://appimage.org/):
+- Keep the project Linux-only.
+- Do not add Windows-only UI projects or WPF dependencies.
+- Keep app launch behavior in `ARCYN.Core`.
+- Keep desktop UI behavior in `ARCYN.Avalonia`.
+- Keep config examples using Linux commands and Linux paths.
+- Add tests when changing config parsing, mode behavior, or launch validation.
+- Avoid personal paths, generated files, local logs, and build outputs in commits.
 
-```bash
-dotnet publish ARCYN/ARCYN.UI -c Release -r linux-x64 --self-contained true
-# Then wrap the publish directory in an AppDir and run appimagetool
-```
+## Pull Request Checklist
 
-**Flatpak** — requires a Flatpak manifest:
+- `./scripts/test-linux.sh` passes.
+- README instructions still match the actual commands.
+- No `bin/`, `obj/`, `publish/`, `dist/`, `node_modules/`, logs, session files, or exported configs are committed.
+- Config schema changes include an updated example config.
+- User-facing errors are specific and actionable.
 
-```bash
-flatpak-builder build-dir flatpak/io.github.arcyn.ARCYN.yml --force-clean
-flatpak-builder --run build-dir io.github.arcyn.ARCYN.yml
-flatpak build-export export-dir build-dir
-```
+## Reporting Issues
 
-**Snap** — requires a `snap/snapcraft.yaml`:
+Use the GitHub issue templates. Include:
 
-```bash
-snapcraft
-```
-
-**Debian package (.deb)**:
-
-```bash
-dotnet publish ARCYN/ARCYN.UI -c Release -r linux-x64 --self-contained true
-# Use dpkg-deb to package the publish directory with proper DEBIAN/control
-```
-
-**RPM package**:
-
-```bash
-dotnet publish ARCYN/ARCYN.UI -c Release -r linux-x64 --self-contained true
-# Use rpmbuild to package the publish directory
-```
-
-## Pull request guidelines
-
-- One feature/fix per PR
-- Rebase on main before submitting
-- Ensure `dotnet build ARCYN/ARCYN.UI -c Release` passes with 0 errors, 0 warnings
-- No breaking changes to `arcyn.json` schema without migration support
-- Test manually: run the app, create a mode, launch it, verify keyboard nav
-
-## Reporting issues
-
-Use the [issue templates](.github/ISSUE_TEMPLATE/) — include:
-- ArcYN version / build date
-- Steps to reproduce
-- Expected vs actual behavior
-- Config file (redact personal paths)
+- Linux distribution and version
+- ARCYN version or commit
+- Exact command that failed
+- Terminal output
+- Relevant `~/.config/ARCYN/arcyn.json` content with personal paths redacted

@@ -125,7 +125,7 @@ public class ModeConfig : INotifyPropertyChanged
                 var name = Path.GetFileName(folder.TrimEnd('\\', '/'));
                 items.Add(new TargetItem(
                     string.IsNullOrEmpty(name) ? folder : name,
-                    "explorer.exe",
+                    "xdg-open",
                     folder,
                     TargetKind.Folder));
             }

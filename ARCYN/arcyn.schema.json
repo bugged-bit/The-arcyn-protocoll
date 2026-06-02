@@ -86,9 +86,9 @@
           },
           "apps": {
             "type": "array",
-            "description": "Applications to launch (exe name, full path, or shell command)",
+            "description": "Applications to launch (Linux command, absolute executable path, or command with arguments)",
             "items": { "type": "string" },
-            "examples": [["wt.exe", "/usr/local/bin/app"]]
+            "examples": [["code", "gnome-terminal", "/usr/local/bin/app"]]
           },
           "websites": {
             "type": "array",
@@ -98,7 +98,7 @@
           },
           "folders": {
             "type": "array",
-            "description": "Folders to open in File Explorer",
+            "description": "Folders to open with the default Linux file manager",
             "items": { "type": "string" },
             "examples": [["/home/user/Projects", "/home/me/Documents"]]
           }

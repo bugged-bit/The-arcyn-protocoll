@@ -2,8 +2,52 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="640"
         x:Class="ARCYN.Avalonia.MainWindow"
-        Title="ARCYN.Avalonia">
-    Welcome to Avalonia!
+        Title="ARCYN"
+        MinWidth="760"
+        MinHeight="520"
+        Width="960"
+        Height="640"
+        Background="#101214">
+    <Grid RowDefinitions="Auto,*,Auto" Margin="24">
+        <StackPanel Grid.Row="0" Spacing="6">
+            <TextBlock Text="ARCYN"
+                       FontSize="30"
+                       FontWeight="SemiBold"
+                       Foreground="#F7A0A0" />
+            <TextBlock Text="Linux workspace launcher"
+                       FontSize="14"
+                       Foreground="#C8D0D8" />
+        </StackPanel>
+
+        <Border Grid.Row="1"
+                Margin="0,22,0,18"
+                Padding="18"
+                BorderBrush="#33D64545"
+                BorderThickness="1"
+                CornerRadius="6"
+                Background="#171A1E">
+            <Grid RowDefinitions="Auto,*">
+                <TextBlock x:Name="StatusText"
+                           Grid.Row="0"
+                           Text="Loading configuration..."
+                           Foreground="#E7EAEE"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,14" />
+                <ScrollViewer Grid.Row="1">
+                    <StackPanel x:Name="ModesPanel" Spacing="10" />
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10">
+            <Button Content="Reload config" Click="ReloadConfig_Click" />
+            <Button Content="Open config folder" Click="OpenConfigFolder_Click" />
+            <TextBlock x:Name="ConfigPathText"
+                       VerticalAlignment="Center"
+                       Foreground="#8FA0AF"
+                       TextWrapping="Wrap" />
+        </StackPanel>
+    </Grid>
 </Window>

@@ -52,10 +52,7 @@ public sealed class ConfigService
 
     public string? ResolvePath()
     {
-        var appData = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            AppDataFolder,
-            ConfigFileName);
+        var appData = Path.Combine(GetConfigRoot(), AppDataFolder, ConfigFileName);
 
         if (File.Exists(appData))
             return appData;
@@ -70,15 +67,27 @@ public sealed class ConfigService
     public string GetOrCreatePath()
     {
         var local = Path.Combine(AppContext.BaseDirectory, ConfigFileName);
-        var appData = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            AppDataFolder,
-            ConfigFileName);
+        var appData = Path.Combine(GetConfigRoot(), AppDataFolder, ConfigFileName);
 
         if (File.Exists(local))
             return local;
 
         return appData;
+    }
+
+    public static string DefaultConfigPath => Path.Combine(GetConfigRoot(), AppDataFolder, ConfigFileName);
+
+    private static string GetConfigRoot()
+    {
+        var xdgConfigHome = Environment.GetEnvironmentVariable("XDG_CONFIG_HOME");
+        if (!string.IsNullOrWhiteSpace(xdgConfigHome))
+            return xdgConfigHome;
+
+        var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        if (!string.IsNullOrWhiteSpace(home))
+            return Path.Combine(home, ".config");
+
+        return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
     }
 
     public void Save(ArcynConfig config)
@@ -196,7 +205,7 @@ public sealed class ConfigService
 
                     Save(config);
 
-                    Debug.WriteLine("Migrated config from {0} → {1}", oldPath, newPath);
+                    Debug.WriteLine("Migrated config from {0} to {1}", oldPath, newPath);
                     return newPath;
                 }
             }

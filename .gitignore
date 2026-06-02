@@ -32,7 +32,6 @@ share/
 # Additional cleanup entries
 .claude/
 .test-results/
-plan.md
 **/publish/
 # IDE/OS generated files
 .vs/

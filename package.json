@@ -1,26 +1,32 @@
 {
-  "name": "protocoll-for-github2",
+  "name": "arcyn",
   "version": "1.0.0",
-  "description": "█████  ██████  ██████ ██   ██ ███   ██\r    ██   ██ ██      ██     ██   ██ ████  ██\r    ███████ █████   ██     ███████ ██ ██ ██\r    ██   ██ ██      ██     ██   ██ ██  ████\r    ██   ██ ██████  ██████ ██   ██ ██   ███",
-  "main": "index.js",
+  "description": "Linux workspace launcher smoke-test tooling.",
+  "private": true,
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test:ui",
+    "test:ui": "playwright test tests/ui.test.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bugged-bit/The-arcyn-protocoll.git"
+    "url": "git+https://github.com/bugged-bit/ARCYN.git"
   },
-  "keywords": [],
+  "keywords": [
+    "linux",
+    "launcher",
+    "avalonia",
+    "workspace"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/bugged-bit/The-arcyn-protocoll/issues"
+    "url": "https://github.com/bugged-bit/ARCYN/issues"
   },
-  "homepage": "https://github.com/bugged-bit/The-arcyn-protocoll#readme",
+  "homepage": "https://github.com/bugged-bit/ARCYN#readme",
   "devDependencies": {
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.1"

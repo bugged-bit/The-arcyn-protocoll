@@ -8,17 +8,14 @@ namespace ARCYN.Core.Services;
 
 public static class LaunchService
 {
-    private static bool IsWindows => OperatingSystem.IsWindows();
-    // New robust creation – validates and normalizes before building ProcessStartInfo.
+    // Validates and normalizes Linux launch targets before building ProcessStartInfo.
     public static bool TryPrepare(TargetItem target, out ProcessStartInfo psi, out string? error)
     {
         psi = null!;
         error = null;
-        // Expand environment variables first
         var cmd = Environment.ExpandEnvironmentVariables(target.LaunchCmd ?? string.Empty).Trim();
         var workingDir = ResolveWorkingDir(target, cmd);
 
-        // Folder launch – ensure folder exists
         if (target.Kind == TargetKind.Folder)
         {
             var folderPath = Environment.ExpandEnvironmentVariables(target.LaunchArg ?? string.Empty).Trim();
@@ -29,7 +26,7 @@ public static class LaunchService
             }
             psi = new ProcessStartInfo
             {
-                FileName = IsWindows ? "explorer.exe" : "xdg-open",
+                FileName = "xdg-open",
                 Arguments = SharedHelper.QuotePath(folderPath),
                 UseShellExecute = true,
                 WindowStyle = ProcessWindowStyle.Normal,
@@ -38,7 +35,6 @@ public static class LaunchService
             return true;
         }
 
-        // Website launch – validate URL
         if (target.Kind == TargetKind.Website)
         {
             if (!Uri.TryCreate(cmd, UriKind.Absolute, out var uri) ||
@@ -49,8 +45,8 @@ public static class LaunchService
             }
             psi = new ProcessStartInfo
             {
-                FileName = IsWindows ? cmd : "xdg-open",
-                Arguments = IsWindows ? string.Empty : cmd,
+                FileName = "xdg-open",
+                Arguments = cmd,
                 UseShellExecute = true,
                 WindowStyle = ProcessWindowStyle.Normal,
                 WorkingDirectory = AppContext.BaseDirectory
@@ -58,37 +54,17 @@ public static class LaunchService
             return true;
         }
 
-        // Guard against empty command for non‑folder/website targets
         if (string.IsNullOrWhiteSpace(cmd))
         {
             error = "Empty command";
             return false;
         }
-        // Path ending with slash – treat as folder launch via explorer
-        if (cmd.Length >= 3 && cmd[1] == ':' && (cmd.EndsWith("\\") || cmd.EndsWith("/")))
-        {
-            if (!Directory.Exists(cmd))
-            {
-                error = "Folder path does not exist";
-                return false;
-            }
-            psi = new ProcessStartInfo
-            {
-                FileName = IsWindows ? "explorer.exe" : "xdg-open",
-                Arguments = SharedHelper.QuotePath(cmd),
-                UseShellExecute = true,
-                WindowStyle = ProcessWindowStyle.Normal,
-                WorkingDirectory = cmd
-            };
-            return true;
-        }
 
-        // Directories – open in explorer/file-manager
         if (Directory.Exists(cmd))
         {
             psi = new ProcessStartInfo
             {
-                FileName = IsWindows ? "explorer.exe" : "xdg-open",
+                FileName = "xdg-open",
                 Arguments = SharedHelper.QuotePath(cmd),
                 UseShellExecute = true,
                 WindowStyle = ProcessWindowStyle.Normal,
@@ -97,28 +73,13 @@ public static class LaunchService
             return true;
         }
 
-        // Shortcut (.lnk) – ensure file exists
         var ext = System.IO.Path.GetExtension(cmd);
         if (ext.Equals(".lnk", StringComparison.OrdinalIgnoreCase))
         {
-            if (!File.Exists(cmd))
-            {
-                error = ".lnk file not found";
-                return false;
-            }
-            psi = new ProcessStartInfo
-            {
-                FileName = cmd,
-                Arguments = string.Empty,
-                UseShellExecute = true,
-                WindowStyle = ProcessWindowStyle.Normal,
-                WorkingDirectory = workingDir
-            };
-            return true;
+            error = "Windows .lnk shortcuts are not supported on Linux. Use a Linux command, .desktop launcher command, or absolute executable path.";
+            return false;
         }
 
-        // Executable or shell command handling
-        // Separate executable part from arguments to support commands like "git status".
         string exePart = cmd;
         string argsPart = string.Empty;
         if (cmd.Contains(' '))
@@ -142,7 +103,6 @@ public static class LaunchService
             }
         }
 
-        // If we have a rooted executable path, verify it exists.
         if (Path.IsPathRooted(exePart))
         {
             if (!File.Exists(exePart))
@@ -151,8 +111,7 @@ public static class LaunchService
                 return false;
             }
         }
-        // For non‑rooted executables we rely on OS PATH resolution.
-        // Build ProcessStartInfo using separated parts.
+
         psi = new ProcessStartInfo
         {
             FileName = exePart,
@@ -166,17 +125,15 @@ public static class LaunchService
 
     private static string ResolveWorkingDir(TargetItem target, string expandedCmd)
     {
-        // Folder kind – use folder itself
         if (target.Kind == TargetKind.Folder && !string.IsNullOrWhiteSpace(target.LaunchArg))
             return Environment.ExpandEnvironmentVariables(target.LaunchArg).Trim();
 
-        // App kind – use directory of executable if absolute path exists
         if (target.Kind == TargetKind.App)
         {
             if (Path.IsPathRooted(expandedCmd) && File.Exists(expandedCmd))
                 return System.IO.Path.GetDirectoryName(expandedCmd) ?? AppContext.BaseDirectory;
         }
-        // Default – application base directory
+
         return AppContext.BaseDirectory;
     }
 

@@ -16,7 +16,7 @@
       "name": "CODE",
       "description": "Development stack online",
       "accent": "#D64545",
-      "apps": ["wt.exe", "code"],
+      "apps": ["gnome-terminal", "code"],
       "websites": ["https://github.com", "https://chatgpt.com"],
       "folders": []
     },
@@ -36,8 +36,8 @@
       "name": "CREATE",
       "description": "Design and media workspace",
       "accent": "#D6A045",
-      "apps": ["mspaint"],
-      "websites": ["https://www.pinterest.com"],
+      "apps": ["gimp"],
+      "websites": ["https://www.figma.com"],
       "folders": []
     }
   ]

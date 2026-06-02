@@ -1,0 +1,67 @@
+name: Linux
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install Linux desktop test tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xdg-utils xvfb xdotool wmctrl
+
+      - name: Restore
+        run: dotnet restore ARCYN/ARCYN.sln
+
+      - name: Build
+        run: dotnet build ARCYN/ARCYN.sln -c Release --no-restore -warnaserror
+
+      - name: Test
+        run: dotnet test ARCYN/ARCYN.sln -c Release --no-build
+
+      - name: Publish linux-x64
+        run: |
+          dotnet publish ARCYN/ARCYN.Avalonia/ARCYN.Avalonia.csproj \
+            -c Release \
+            -r linux-x64 \
+            --self-contained true \
+            -o dist/ARCYN-linux-x64
+
+      - name: Validate published binary
+        run: |
+          test -f dist/ARCYN-linux-x64/ARCYN
+          test -x dist/ARCYN-linux-x64/ARCYN
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: UI smoke test
+        env:
+          APP_PATH: dist/ARCYN-linux-x64/ARCYN
+        run: xvfb-run -a npm run test:ui
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ARCYN-linux-x64
+          path: dist/ARCYN-linux-x64

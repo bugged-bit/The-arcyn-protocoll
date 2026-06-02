@@ -3,8 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace ARCYN.Core.Utils;
 
 /// <summary>
-/// Shared utility methods consolidated from ARCYN.UI.Utils.Helper and StringExtensions.
-/// Provides common string operations, path quoting, and validation helpers.
+/// Shared string, path quoting, and validation helpers.
 /// </summary>
 public static class SharedHelper
 {
