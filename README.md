@@ -21,6 +21,8 @@ ARCYN is a Linux‑only desktop workspace launcher built with .NET 8 and Avalo
 git clone https://github.com/bugged-bit/ARCYN.git && cd ARCYN && ./scripts/setup-linux.sh && ./scripts/run-linux.sh
 ```
 
+Setup is **interactive**: after restoring and building, the script drops you into a terminal wizard that creates `~/.config/ARCYN/arcyn.json` and then launches ARCYN automatically. If you'd rather skip the wizard (e.g. in CI), set `ARCYN_NO_WIZARD=1` and the bundled example config is copied for you.
+
 If you hit a *Permission denied* error, make the scripts executable first:
 
 ```bash
@@ -33,49 +35,49 @@ chmod +x scripts/*.sh
 
 ## ⚙️ First‑time Configuration
 
-ARCYN reads a JSON file located at `~/.config/ARCYN/arcyn.json`.
+The setup script (`./scripts/setup-linux.sh`) is interactive. After the build completes, it drops you into a terminal wizard that creates `~/.config/ARCYN/arcyn.json` for you.
 
-1. **Create the config directory and copy the example**:
-   ```bash
-   mkdir -p ~/.config/ARCYN
-   cp ARCYN/example.arcyn.json ~/.config/ARCYN/arcyn.json
-   ```
-2. **Edit the file** with your favourite editor (e.g. `nano`, `vim`, `code`):
-   ```bash
-   nano ~/.config/ARCYN/arcyn.json
-   ```
-3. **Populate the fields**:
-   - **Apps** – commands available on your machine (`code`, `firefox`, `gnome-terminal`, `/usr/bin/nautilus`, …).
-   - **Folders** – absolute Linux paths, e.g. `/home/you/projects`.
-   - **Websites** – full URLs starting with `http://` or `https://`.
-   - **Shortcut** (optional) – keyboard combo that launches this mode. See [Keyboard Shortcuts](#-keyboard-shortcuts) below.
+What the wizard does:
 
-### Minimal Example
-```json
-{
-  "theme": {
-    "accent": "#D64545",
-    "glow_opacity": 0.28,
-    "scanlines": true,
-    "animations": true
-  },
-  "behavior": {
-    "idle_timeout_seconds": 10,
-    "always_on_top": true,
-    "close_on_launch": true
-  },
-  "modes": [
-    {
-      "name": "CODE",
-      "description": "Development workspace",
-      "accent": "#D64545",
-      "apps": ["gnome-terminal", "code"],
-      "websites": ["https://github.com"],
-      "folders": ["/home/you/projects"]
-    }
-  ]
-}
+- Detects an existing config and asks whether to **re-run**, **keep**, or **view** the current path.
+- Offers preset workspace modes — `CODE` (terminal + editor + GitHub), `BROWSE` (research sites), `CREATE` (GIMP + Figma), `STUDY` (Obsidian + Notion) — and a **Custom** blank mode you fill in yourself.
+- Lets you add apps, folders, and websites per mode, with folder paths and URLs validated as you type.
+- Lets you set behavior (idle timeout, always-on-top, close-on-launch) and optionally customize the theme.
+- Previews the final JSON and asks for confirmation before writing.
+- Optionally launches ARCYN at the end.
+
+The wizard uses `whiptail` if available, then `dialog`, then a plain bash fallback. Install one of the first two for the best experience:
+
+```bash
+# Debian / Ubuntu
+sudo apt install newt
+# Fedora
+sudo dnf install newt
+# Arch
+sudo pacman -S libnewt
 ```
+
+### Re-running the wizard
+
+You can re-run the wizard any time to reconfigure:
+
+```bash
+./scripts/wizard.sh
+```
+
+If `~/.config/ARCYN/arcyn.json` already exists, the wizard will offer to overwrite, keep, or show the current path.
+
+### Manual configuration
+
+If you'd rather edit the file by hand, copy the example and edit it:
+
+```bash
+mkdir -p ~/.config/ARCYN
+cp ARCYN/example.arcyn.json ~/.config/ARCYN/arcyn.json
+nano ~/.config/ARCYN/arcyn.json
+```
+
+The schema is `ARCYN/arcyn.schema.json` (Draft-07). The wizard produces a config that matches this example shape, and ARCYN's config loader silently drops invalid folders (nonexistent paths) and invalid URLs, so small mistakes are forgiven.
 
 ---
 
@@ -180,6 +182,7 @@ See the dedicated [troubleshooting guide](docs/troubleshooting.md) for common is
 - `xdg-open` not found
 - Configuration JSON errors
 - Display problems for the UI test
+- Setup wizard skipped in a non-interactive shell (CI, `curl | bash`, no TTY) — run `./scripts/wizard.sh` in a real terminal to customize
 
 ---
 
@@ -193,7 +196,7 @@ ARCYN/
   tests/                   # .NET unit tests + optional UI test
   arcyn.schema.json        # JSON schema for the config file
   example.arcyn.json       # Starter configuration
-scripts/                     # Helper scripts: setup, run, test, publish
+scripts/                   # Helper scripts: setup, wizard, run, test, publish
 docs/                       # Screenshots and troubleshooting docs
 ```
 
@@ -238,6 +241,8 @@ cd ARCYN
 ./scripts/run-linux.sh
 ```
 
+Setup is **interactive**: after restoring and building, the script drops you into a terminal wizard that creates `~/.config/ARCYN/arcyn.json` and then launches ARCYN automatically. In CI or non-interactive shells, set `ARCYN_NO_WIZARD=1` to skip the wizard and copy the bundled example config.
+
 If your shell says `Permission denied`, run:
 
 ```bash
@@ -248,22 +253,31 @@ chmod +x scripts/*.sh
 
 ## First Configuration
 
-ARCYN reads this config file:
+`./scripts/setup-linux.sh` is interactive. After building, it runs `scripts/wizard.sh`, which:
 
-```text
-~/.config/ARCYN/arcyn.json
+- Detects an existing `~/.config/ARCYN/arcyn.json` and asks whether to re-run, keep, or view the current path.
+- Offers preset modes (`CODE`, `BROWSE`, `CREATE`, `STUDY`) and a blank **Custom** mode.
+- Lets you add apps, folders, websites, and a keyboard shortcut per mode, with folder and URL validation as you type.
+- Previews the final JSON, writes it on confirmation, and optionally launches ARCYN.
+
+The wizard uses `whiptail` if installed, then `dialog`, then a plain bash fallback. For the best experience, install one of the first two:
+
+```bash
+# Debian / Ubuntu
+sudo apt install newt
+# Fedora
+sudo dnf install newt
+# Arch
+sudo pacman -S libnewt
 ```
 
-Create the folder and copy the included example:
+Re-run the wizard any time with `./scripts/wizard.sh`.
+
+If you'd rather edit the file by hand, copy the included example:
 
 ```bash
 mkdir -p ~/.config/ARCYN
 cp ARCYN/example.arcyn.json ~/.config/ARCYN/arcyn.json
-```
-
-Then edit the file:
-
-```bash
 nano ~/.config/ARCYN/arcyn.json
 ```
 
@@ -387,7 +401,7 @@ ARCYN/
   tests/                 .NET unit tests
   arcyn.schema.json      JSON schema for config files
   example.arcyn.json     Starter config
-scripts/                 Linux setup, run, test, and publish helpers
+scripts/                 Linux setup, wizard, run, test, and publish helpers
 docs/                    Screenshot and troubleshooting
 tests/                   Optional UI smoke test
 ```

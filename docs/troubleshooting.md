@@ -86,7 +86,13 @@ At least one should usually be set in a desktop session. If you are connected ov
 
 ARCYN could not find a valid config.
 
-Create one:
+Create one with the interactive wizard:
+
+```bash
+./scripts/wizard.sh
+```
+
+Or copy the example manually:
 
 ```bash
 mkdir -p ~/.config/ARCYN
@@ -94,6 +100,29 @@ cp ARCYN/example.arcyn.json ~/.config/ARCYN/arcyn.json
 ```
 
 Then click `Reload config` in ARCYN or restart the app.
+
+## Setup Wizard Skipped / Silent
+
+The wizard auto-skips when it cannot detect an interactive terminal. That happens if you ran `./scripts/setup-linux.sh` from CI, over ` `curl ... | bash``, with stdin redirected (`</dev/null`), or with `ARCYN_NO_WIZARD=1` set.
+
+The script prints a single message and (if no config exists) copies the bundled example to `~/.config/ARCYN/arcyn.json`. To customize, run the wizard in a real terminal:
+
+```bash
+./scripts/wizard.sh
+```
+
+## Wizard Says "No dialog tool found"
+
+This is informational -- the wizard fell back to plain bash prompts, which still works but is less polished. For a richer UI install `whiptail` (recommended) or `dialog`:
+
+```bash
+# Debian / Ubuntu
+sudo apt install newt
+# Fedora
+sudo dnf install newt
+# Arch
+sudo pacman -S libnewt
+```
 
 ## Config File Is Malformed
 

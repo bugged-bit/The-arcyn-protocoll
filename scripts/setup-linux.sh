@@ -35,8 +35,23 @@ echo "Building ARCYN..."
 dotnet build ARCYN/ARCYN.sln -c Release --no-restore
 
 echo
+echo "Build complete. Launching the ARCYN setup wizard..."
+echo
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=./wizard.sh
+source "$SCRIPT_DIR/wizard.sh"
+
+wiz_rc=0
+arcyn_wizard_main || wiz_rc=$?
+case "$wiz_rc" in
+  0) ;;  # wizard completed (and may have exec'd into run-linux.sh)
+  1) echo "Skipped interactive setup." ;;
+  2) echo "Setup cancelled by user."; exit 1 ;;
+  *) echo "Wizard exited with code $wiz_rc." ;;
+esac
+
+echo
 echo "Setup complete."
 echo "Run ARCYN with: ./scripts/run-linux.sh"
-echo "Optional config starter:"
-echo "  mkdir -p ~/.config/ARCYN"
-echo "  cp ARCYN/example.arcyn.json ~/.config/ARCYN/arcyn.json"
+echo "Re-run the setup wizard with: ./scripts/wizard.sh"
