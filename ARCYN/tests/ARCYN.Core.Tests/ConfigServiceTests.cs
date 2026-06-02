@@ -71,6 +71,125 @@ public sealed class ConfigServiceTests : IDisposable
         }
     }
 
+    [Fact]
+    public void Load_ConfigWithValidShortcut_AssignsToMode()
+    {
+        var json = """
+        {
+          "modes": [
+            { "name": "A", "shortcut": "Ctrl+Alt+1", "apps": ["code"], "websites": [], "folders": [] }
+          ]
+        }
+        """;
+        File.WriteAllText(_configPath, json);
+        try
+        {
+            var service = new ConfigService();
+            var config = service.Load();
+            Assert.NotNull(config);
+            Assert.Single(config.Modes);
+            Assert.Equal("Ctrl+Alt+1", config.Modes[0].Shortcut);
+        }
+        finally
+        {
+            if (File.Exists(_configPath))
+                File.Delete(_configPath);
+        }
+    }
+
+    [Fact]
+    public void Load_ConfigWithInvalidShortcut_ClearsFieldKeepsMode()
+    {
+        var json = """
+        {
+          "modes": [
+            { "name": "A", "shortcut": "garbage", "apps": ["code"], "websites": [], "folders": [] }
+          ]
+        }
+        """;
+        File.WriteAllText(_configPath, json);
+        try
+        {
+            var service = new ConfigService();
+            var config = service.Load();
+            Assert.NotNull(config);
+            Assert.Single(config.Modes);
+            Assert.Equal("A", config.Modes[0].Name);
+            Assert.Null(config.Modes[0].Shortcut);
+        }
+        finally
+        {
+            if (File.Exists(_configPath))
+                File.Delete(_configPath);
+        }
+    }
+
+    [Fact]
+    public void Load_ConfigWithShortcutContainingExtraSpaces_Trims()
+    {
+        var json = """
+        {
+          "modes": [
+            { "name": "A", "shortcut": "  Ctrl+Alt+1  ", "apps": ["code"], "websites": [], "folders": [] }
+          ]
+        }
+        """;
+        File.WriteAllText(_configPath, json);
+        try
+        {
+            var service = new ConfigService();
+            var config = service.Load();
+            Assert.NotNull(config);
+            Assert.Single(config.Modes);
+            Assert.Equal("Ctrl+Alt+1", config.Modes[0].Shortcut);
+        }
+        finally
+        {
+            if (File.Exists(_configPath))
+                File.Delete(_configPath);
+        }
+    }
+
+    [Fact]
+    public void Load_ConfigWithEmptyShortcut_StoresNull()
+    {
+        var json = """
+        {
+          "modes": [
+            { "name": "A", "shortcut": "", "apps": ["code"], "websites": [], "folders": [] }
+          ]
+        }
+        """;
+        File.WriteAllText(_configPath, json);
+        try
+        {
+            var service = new ConfigService();
+            var config = service.Load();
+            Assert.NotNull(config);
+            Assert.Single(config.Modes);
+            Assert.Null(config.Modes[0].Shortcut);
+        }
+        finally
+        {
+            if (File.Exists(_configPath))
+                File.Delete(_configPath);
+        }
+    }
+
+    [Fact]
+    public void ModeConfig_ShortcutHint_ReflectsParsedCombo()
+    {
+        var mode = new ModeConfig { Name = "A", Shortcut = "ctrl+alt+1", Index = 1 };
+        Assert.Equal("Ctrl+Alt+1", mode.ShortcutHint);
+    }
+
+    [Fact]
+    public void ModeConfig_ShortcutHint_FallsBackToIndexWhenMissing()
+    {
+        var mode = new ModeConfig { Name = "A", Index = 2 };
+        Assert.Equal("[2]", mode.ShortcutHint);
+    }
+
     public void Dispose()
     {
         if (File.Exists(_configPath))

@@ -274,6 +274,25 @@ public sealed class ConfigService
                 return false;
             }).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
 
+            // Sanitize shortcut – trim, drop if unparseable. Do not drop the mode.
+            if (mode.Shortcut != null)
+            {
+                var trimmed = mode.Shortcut.Trim();
+                if (trimmed.Length == 0)
+                {
+                    mode.Shortcut = null;
+                }
+                else if (!KeyCombo.TryParse(trimmed, out _))
+                {
+                    Debug.WriteLine("Ignoring invalid shortcut '{0}' for mode '{1}'", trimmed, mode.Name);
+                    mode.Shortcut = null;
+                }
+                else
+                {
+                    mode.Shortcut = trimmed;
+                }
+            }
+
             // If mode has no targets after sanitization, drop it
             if (mode.Apps.Count == 0 && mode.Websites.Count == 0 && mode.Folders.Count == 0)
                 continue;

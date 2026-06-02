@@ -48,6 +48,7 @@ ARCYN reads a JSON file located at `~/.config/ARCYN/arcyn.json`.
    - **Apps** – commands available on your machine (`code`, `firefox`, `gnome-terminal`, `/usr/bin/nautilus`, …).
    - **Folders** – absolute Linux paths, e.g. `/home/you/projects`.
    - **Websites** – full URLs starting with `http://` or `https://`.
+   - **Shortcut** (optional) – keyboard combo that launches this mode. See [Keyboard Shortcuts](#-keyboard-shortcuts) below.
 
 ### Minimal Example
 ```json
@@ -75,6 +76,37 @@ ARCYN reads a JSON file located at `~/.config/ARCYN/arcyn.json`.
   ]
 }
 ```
+
+---
+
+## ⌨️ Keyboard Shortcuts
+
+ARCYN is designed to be driven from the keyboard. Set a `shortcut` on any mode in `arcyn.json`:
+
+```json
+{
+  "modes": [
+    { "name": "CODE",   "shortcut": "Ctrl+Alt+1", "apps": ["code"],            "websites": [], "folders": [] },
+    { "name": "BROWSE", "shortcut": "Super+K",    "apps": [],                  "websites": ["https://news.ycombinator.com"], "folders": [] },
+    { "name": "CREATE",                            "apps": ["gimp"],            "websites": [], "folders": [] }
+  ]
+}
+```
+
+Accepted formats:
+
+- **Modifiers** – one or more of `Ctrl`, `Alt`, `Shift`, `Meta`, `Super` (also `Cmd` / `Win`), joined by `+`.
+- **Key** – a digit `0`–`9`, a letter `A`–`Z`, a function key `F1`–`F24`, or a named key (`Escape`, `Tab`, `Space`, `Enter`, `Insert`, `Delete`, `Home`, `End`, `PageUp`, `PageDown`, `Up`, `Down`, `Left`, `Right`).
+- Modifiers come **before** the key. `Ctrl+1`, `Ctrl+Alt+Shift+F11`, `Super+K` are all valid.
+
+Behaviour:
+
+- A configured `shortcut` launches the matching mode when ARCYN is the focused window.
+- If a mode has no `shortcut`, the **bare digit** `1`–`9` launches that mode by position.
+- `Esc` always closes the ARCYN window.
+- Invalid `shortcut` strings are ignored with a clear warning in the status text; the mode is still usable via the Launch button or the implicit digit binding.
+
+**Note:** Shortcuts are scoped to the ARCYN window. This keeps the app reliable across X11 and Wayland with no extra Linux dependencies. Global system-wide hotkeys would require `libx11-dev` and only work on X11.
 
 ---
 

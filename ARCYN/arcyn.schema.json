@@ -101,6 +101,12 @@
             "description": "Folders to open with the default Linux file manager",
             "items": { "type": "string" },
             "examples": [["/home/user/Projects", "/home/me/Documents"]]
+          },
+          "shortcut": {
+            "type": "string",
+            "description": "Optional keyboard shortcut that launches this mode. Format: modifiers joined by '+' plus a key, e.g. 'Ctrl+Alt+1', 'ctrl+shift+F5', 'Super+K', 'F12'. If omitted, the implicit digit '1'..'9' launches modes by position.",
+            "pattern": "^(Ctrl|Alt|Shift|Meta|Super|cmd|win)([+](Ctrl|Alt|Shift|Meta|Super|cmd|win))*[+]([A-Za-z0-9]|F(1[0-9]|2[0-4]|[1-9])|Escape|Tab|Space|Enter|Backspace|Insert|Delete|Home|End|PageUp|PageDown|Up|Down|Left|Right)$",
+            "examples": ["Ctrl+Alt+1", "Super+K", "F5"]
           }
         },
         "required": ["name"],

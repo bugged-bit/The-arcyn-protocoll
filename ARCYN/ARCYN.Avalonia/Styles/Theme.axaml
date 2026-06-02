@@ -23,7 +23,7 @@
     <SolidColorBrush x:Key="BorderSubtleBrush" Color="#22D64545" />
     <SolidColorBrush x:Key="BorderGlowBrush" Color="#55D64545" />
 
-    <FontFamily x:Key="UIFont">pack://application:,,,/Assets/Fonts/#JetBrainsMono NF</FontFamily>
+    <FontFamily x:Key="UIFont">avares://Avalonia.Fonts.Inter/#Inter</FontFamily>
 
     <DropShadowEffect x:Key="GlowAccent" Color="#D64545" BlurRadius="2" Opacity="0.04" />
     <DropShadowEffect x:Key="GlowAccentSoft" Color="#D64545" BlurRadius="1.5" Opacity="0.08" />

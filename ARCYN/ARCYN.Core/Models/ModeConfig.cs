@@ -13,6 +13,7 @@ public class ModeConfig : INotifyPropertyChanged
     private List<string> _apps = [];
     private List<string> _websites = [];
     private List<string> _folders = [];
+    private string? _shortcut;
     private int _index;
     private int _launchCount;
     private DateTime? _lastLaunchedAt;
@@ -60,6 +61,19 @@ public class ModeConfig : INotifyPropertyChanged
         set => SetField(ref _folders, value);
     }
 
+    [JsonPropertyName("shortcut")]
+    public string? Shortcut
+    {
+        get => _shortcut;
+        set
+        {
+            if (!SetField(ref _shortcut, value))
+                return;
+
+            OnPropertyChanged(nameof(ShortcutHint));
+        }
+    }
+
     [JsonIgnore]
     public int Index
     {
@@ -78,7 +92,15 @@ public class ModeConfig : INotifyPropertyChanged
     public string IndexLabel => Index <= 0 ? "--" : Index.ToString("D2");
 
     [JsonIgnore]
-    public string ShortcutHint => $"[{Math.Max(Index, 1)}]";
+    public string ShortcutHint
+    {
+        get
+        {
+            if (!string.IsNullOrWhiteSpace(_shortcut) && KeyCombo.TryParse(_shortcut, out var combo))
+                return combo.ToString();
+            return $"[{Math.Max(Index, 1)}]";
+        }
+    }
 
     [JsonIgnore]
     public int ProcessCount => _apps.Count + _websites.Count + _folders.Count;

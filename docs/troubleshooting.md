@@ -160,3 +160,18 @@ The expected binary is:
 ```text
 dist/ARCYN-linux-x64/ARCYN
 ```
+
+## Shortcut Does Not Launch a Mode
+
+Check the following, in order:
+
+1. **ARCYN must be the focused window.** Shortcuts are scoped to the window, not the whole desktop. Click the ARCYN title bar first.
+2. **The shortcut parses.** Re-check the format. The last segment must be the key, modifiers must come first, only one key per combo. Examples that work: `Ctrl+Alt+1`, `Super+K`, `F5`, `Escape`. Examples that do **not**: `1+Ctrl` (reversed), `Ctrl+` (trailing modifier), `Ctrl+Alt+Ctrl+1` (duplicate modifier), `Foo+Bar` (unknown key).
+3. **Reload the config.** Click the **Reload config** button in the ARCYN window after editing `arcyn.json`.
+4. **Use the implicit digit fallback.** If a mode has no `shortcut` field, press the bare digit `1`–`9` to launch that mode by position.
+5. **Press `Esc` to close.** `Esc` always closes the ARCYN window, regardless of focus or any mode.
+6. **Check the status text.** If a configured shortcut is invalid, the status text shows `Ignored invalid shortcut for MODE: '<text>'`. The mode is preserved and can still be launched via the button or the digit binding.
+
+## Status Text Reports `Ignored invalid shortcut`
+
+The string in the `shortcut` field did not parse. Fix the format (see the previous section) and reload. Common mistakes are trailing `+`, reversed order, lowercase modifier names with odd casing, and unknown keys.
