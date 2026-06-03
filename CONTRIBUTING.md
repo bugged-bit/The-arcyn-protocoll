@@ -12,8 +12,8 @@ ARCYN is a Linux-only .NET 8 Avalonia app. Keep contributions focused, documente
 ## First-Time Setup
 
 ```bash
-git clone https://github.com/bugged-bit/ARCYN.git
-cd ARCYN
+git clone https://github.com/bugged-bit/The-arcyn-protocoll.git
+cd The-arcyn-protocoll
 chmod +x scripts/*.sh
 ./scripts/setup-linux.sh
 ```

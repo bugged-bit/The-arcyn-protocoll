@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bugged-bit/ARCYN.git"
+    "url": "git+https://github.com/bugged-bit/The-arcyn-protocoll.git"
   },
   "keywords": [
     "linux",
@@ -24,9 +24,9 @@
   "license": "MIT",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/bugged-bit/ARCYN/issues"
+    "url": "https://github.com/bugged-bit/The-arcyn-protocoll/issues"
   },
-  "homepage": "https://github.com/bugged-bit/ARCYN#readme",
+  "homepage": "https://github.com/bugged-bit/The-arcyn-protocoll#readme",
   "devDependencies": {
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.1"

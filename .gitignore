@@ -26,7 +26,7 @@ smoke-test.sh
 arcyn_export.json
 
 # Untracked files cleanup
-The-arcyn-proc*
+The-arcyn-protocoll*
 .local/
 share/
 # Additional cleanup entries

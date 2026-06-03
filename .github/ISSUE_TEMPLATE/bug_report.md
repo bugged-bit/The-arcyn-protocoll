@@ -28,4 +28,4 @@ What actually happens.
 If applicable.
 
 **Logs**
-Check `$XDG_CONFIG_HOME/arcyn/arcyn_launch.log` or `~/.config/arcyn/arcyn_launch.log`.
+Check `$XDG_CONFIG_HOME/ARCYN/arcyn_launch.log` or `~/.config/ARCYN/arcyn_launch.log`.

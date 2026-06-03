@@ -7,6 +7,7 @@
     "animations": true
   },
   "behavior": {
+    "global_shortcut": "Super+Space",
     "idle_timeout_seconds": 10,
     "always_on_top": true,
     "close_on_launch": true

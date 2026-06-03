@@ -52,14 +52,13 @@ public sealed class ConfigService
 
     public string? ResolvePath()
     {
-        var appData = Path.Combine(GetConfigRoot(), AppDataFolder, ConfigFileName);
-
-        if (File.Exists(appData))
-            return appData;
-
         var local = Path.Combine(AppContext.BaseDirectory, ConfigFileName);
         if (File.Exists(local))
             return local;
+
+        var appData = Path.Combine(GetConfigRoot(), AppDataFolder, ConfigFileName);
+        if (File.Exists(appData))
+            return appData;
 
         return TryMigrateOldConfig();
     }
@@ -310,6 +309,37 @@ public sealed class ConfigService
         // Ensure Theme and Behavior sections have defaults (they are already instantiated by default ctor)
         config.Theme ??= new ThemeConfig();
         config.Behavior ??= new BehaviorConfig();
+
+        if (config.Behavior.GlobalShortcut != null)
+        {
+            var trimmed = config.Behavior.GlobalShortcut.Trim();
+            if (trimmed.Length == 0)
+            {
+                config.Behavior.GlobalShortcut = null;
+            }
+            else if (!KeyCombo.TryParse(trimmed, out _))
+            {
+                Debug.WriteLine("Ignoring invalid global_shortcut '{0}'", trimmed);
+                config.Behavior.GlobalShortcut = null;
+            }
+            else
+            {
+                var collides = config.Modes.Any(m =>
+                    !string.IsNullOrWhiteSpace(m.Shortcut) &&
+                    string.Equals(m.Shortcut.Trim(), trimmed, StringComparison.OrdinalIgnoreCase));
+
+                if (collides)
+                {
+                    Debug.WriteLine("Global shortcut '{0}' collides with mode shortcut – clearing", trimmed);
+                    config.Behavior.GlobalShortcut = null;
+                }
+                else
+                {
+                    config.Behavior.GlobalShortcut = trimmed;
+                }
+            }
+        }
+
         return config;
     }
 }

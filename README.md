@@ -18,7 +18,7 @@ ARCYN is a Linux‑only desktop workspace launcher built with .NET 8 and Avalo
 ## 🚀 Quick Start (One‑liner)
 
 ```bash
-git clone https://github.com/bugged-bit/ARCYN.git && cd ARCYN && ./scripts/setup-linux.sh && ./scripts/run-linux.sh
+git clone https://github.com/bugged-bit/The-arcyn-protocoll.git && cd The-arcyn-protocoll && ./scripts/setup-linux.sh && ./scripts/run-linux.sh
 ```
 
 Setup is **interactive**: after restoring and building, the script drops you into a terminal wizard that creates `~/.config/ARCYN/arcyn.json` and then launches ARCYN automatically. If you'd rather skip the wizard (e.g. in CI), set `ARCYN_NO_WIZARD=1` and the bundled example config is copied for you.
@@ -109,6 +109,31 @@ Behaviour:
 - Invalid `shortcut` strings are ignored with a clear warning in the status text; the mode is still usable via the Launch button or the implicit digit binding.
 
 **Note:** Shortcuts are scoped to the ARCYN window. This keeps the app reliable across X11 and Wayland with no extra Linux dependencies. Global system-wide hotkeys would require `libx11-dev` and only work on X11.
+
+---
+
+## 🌐 Global Shortcut
+
+ARCYN supports a **system‑wide global shortcut** that brings the ARCYN window to the front or launches it from any desktop — even when ARCYN is not focused. This shortcut is registered with the Linux desktop environment via a freedesktop.org portal.
+
+The global shortcut is configured during the interactive wizard (`./scripts/wizard.sh`). When prompted, choose a key combination (e.g., `Ctrl+Alt+A`) to use as the global toggle. The wizard installs a `.desktop` file at `~/.local/share/applications/ARCYN.desktop` that registers the shortcut with your DE.
+
+### Desktop Environment Notes
+
+- **KDE Plasma** — The shortcut should work automatically after the wizard completes. You can verify or change it in *System Settings → Shortcuts → Custom Shortcuts*.
+- **GNOME** — GNOME does not honour the portal shortcut by default. Use *Settings → Keyboard → Keyboard Shortcuts → Custom Shortcuts* to add an ARCYN entry pointing to the `ARCYN` command, or register it from the terminal:
+  ```bash
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/arcyn/ name 'ARCYN'
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/arcyn/ command 'ARCYN'
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/arcyn/ binding '<Ctrl><Alt>A'
+  ```
+- **Sway / i3** — Add a line to your config (`~/.config/sway/config` or `~/.config/i3/config`):
+  ```bash
+  bindsym $mod+Shift+A exec ARCYN
+  ```
+  Replace `$mod+Shift+A` with your preferred combination.
+- **Cinnamon** — Open *System Settings → Keyboard → Shortcuts → Custom Shortcuts*, add a new shortcut pointing to `ARCYN`.
+- **XFCE** — Open *Settings → Keyboard → Application Shortcuts*, click *Add*, enter `ARCYN`, and press your chosen key combination.
 
 ---
 
@@ -215,201 +240,3 @@ MIT – see the [LICENSE](LICENSE) file for details.
 ---
 
 *Happy hacking! 🎉*
-
-ARCYN is a Linux desktop workspace launcher. It opens the apps, folders, and websites for a saved workspace mode with one click.
-
-![ARCYN screenshot](docs/screenshot.png)
-
-## Supported Platform
-
-ARCYN is Linux-only. The app targets .NET 8 and uses Avalonia for the desktop UI.
-
-Tested deployment target:
-
-- Linux x64
-- .NET 8 SDK for building from source
-- `xdg-open` for opening folders and websites
-
-## Quick Start
-
-Run these commands from a terminal:
-
-```bash
-git clone https://github.com/bugged-bit/ARCYN.git
-cd ARCYN
-./scripts/setup-linux.sh
-./scripts/run-linux.sh
-```
-
-Setup is **interactive**: after restoring and building, the script drops you into a terminal wizard that creates `~/.config/ARCYN/arcyn.json` and then launches ARCYN automatically. In CI or non-interactive shells, set `ARCYN_NO_WIZARD=1` to skip the wizard and copy the bundled example config.
-
-If your shell says `Permission denied`, run:
-
-```bash
-chmod +x scripts/*.sh
-./scripts/setup-linux.sh
-./scripts/run-linux.sh
-```
-
-## First Configuration
-
-`./scripts/setup-linux.sh` is interactive. After building, it runs `scripts/wizard.sh`, which:
-
-- Detects an existing `~/.config/ARCYN/arcyn.json` and asks whether to re-run, keep, or view the current path.
-- Offers preset modes (`CODE`, `BROWSE`, `CREATE`, `STUDY`) and a blank **Custom** mode.
-- Lets you add apps, folders, websites, and a keyboard shortcut per mode, with folder and URL validation as you type.
-- Previews the final JSON, writes it on confirmation, and optionally launches ARCYN.
-
-The wizard uses `whiptail` if installed, then `dialog`, then a plain bash fallback. For the best experience, install one of the first two:
-
-```bash
-# Debian / Ubuntu
-sudo apt install newt
-# Fedora
-sudo dnf install newt
-# Arch
-sudo pacman -S libnewt
-```
-
-Re-run the wizard any time with `./scripts/wizard.sh`.
-
-If you'd rather edit the file by hand, copy the included example:
-
-```bash
-mkdir -p ~/.config/ARCYN
-cp ARCYN/example.arcyn.json ~/.config/ARCYN/arcyn.json
-nano ~/.config/ARCYN/arcyn.json
-```
-
-Use Linux commands that exist on your machine. Good examples are:
-
-- `code`
-- `firefox`
-- `gnome-terminal`
-- `/usr/bin/nautilus`
-
-Folders should be Linux paths, for example:
-
-```text
-/home/you/projects
-```
-
-Websites must start with `http://` or `https://`.
-
-## Example Config
-
-```json
-{
-  "theme": {
-    "accent": "#D64545",
-    "glow_opacity": 0.28,
-    "scanlines": true,
-    "animations": true
-  },
-  "behavior": {
-    "idle_timeout_seconds": 10,
-    "always_on_top": true,
-    "close_on_launch": true
-  },
-  "modes": [
-    {
-      "name": "CODE",
-      "description": "Development workspace",
-      "accent": "#D64545",
-      "apps": ["gnome-terminal", "code"],
-      "websites": ["https://github.com"],
-      "folders": ["/home/you/projects"]
-    }
-  ]
-}
-```
-
-## Build From Source
-
-```bash
-./scripts/setup-linux.sh
-```
-
-That script checks Linux, checks .NET 8, restores packages, and builds the app.
-
-Manual equivalent:
-
-```bash
-dotnet restore ARCYN/ARCYN.sln
-dotnet build ARCYN/ARCYN.sln -c Release
-```
-
-## Run From Source
-
-```bash
-./scripts/run-linux.sh
-```
-
-Manual equivalent:
-
-```bash
-dotnet run --project ARCYN/ARCYN.Avalonia/ARCYN.Avalonia.csproj
-```
-
-## Publish A Standalone Linux Build
-
-```bash
-./scripts/publish-linux.sh
-```
-
-The published app is written to:
-
-```text
-dist/ARCYN-linux-x64/
-```
-
-Run it with:
-
-```bash
-./dist/ARCYN-linux-x64/ARCYN
-```
-
-## Developer Checks
-
-Run all normal checks:
-
-```bash
-./scripts/test-linux.sh
-```
-
-Manual equivalent:
-
-```bash
-dotnet restore ARCYN/ARCYN.sln
-dotnet build ARCYN/ARCYN.sln -c Release
-dotnet test ARCYN/ARCYN.sln -c Release
-```
-
-The optional UI smoke test is in `tests/ui.test.ts`. It needs Node.js dependencies and a Linux display or `xvfb-run`.
-
-## Troubleshooting
-
-See [docs/troubleshooting.md](docs/troubleshooting.md) for exact fixes for missing .NET, script permissions, missing `xdg-open`, config errors, and display problems.
-
-## Project Structure
-
-```text
-ARCYN/
-  ARCYN.sln
-  ARCYN.Avalonia/        Linux desktop app
-  ARCYN.Core/            Config, modes, and launch logic
-  tests/                 .NET unit tests
-  arcyn.schema.json      JSON schema for config files
-  example.arcyn.json     Starter config
-scripts/                 Linux setup, wizard, run, test, and publish helpers
-docs/                    Screenshot and troubleshooting
-tests/                   Optional UI smoke test
-```
-
-## Contributing
-
-Read [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## License
-
-MIT. See [LICENSE](LICENSE).

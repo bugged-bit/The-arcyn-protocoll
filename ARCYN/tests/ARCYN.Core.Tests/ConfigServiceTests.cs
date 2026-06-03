@@ -177,6 +177,58 @@ public sealed class ConfigServiceTests : IDisposable
     }
 
     [Fact]
+    public void Load_ConfigWithInvalidGlobalShortcut_ClearsField()
+    {
+        var json = """
+        {
+          "behavior": { "global_shortcut": "garbage" },
+          "modes": [
+            { "name": "A", "apps": ["code"], "websites": [], "folders": [] }
+          ]
+        }
+        """;
+        File.WriteAllText(_configPath, json);
+        try
+        {
+            var service = new ConfigService();
+            var config = service.Load();
+            Assert.NotNull(config);
+            Assert.Null(config.Behavior.GlobalShortcut);
+        }
+        finally
+        {
+            if (File.Exists(_configPath))
+                File.Delete(_configPath);
+        }
+    }
+
+    [Fact]
+    public void Load_ConfigWithGlobalShortcutCollidingWithMode_ClearsField()
+    {
+        var json = """
+        {
+          "behavior": { "global_shortcut": "Ctrl+Alt+1" },
+          "modes": [
+            { "name": "A", "shortcut": "Ctrl+Alt+1", "apps": ["code"], "websites": [], "folders": [] }
+          ]
+        }
+        """;
+        File.WriteAllText(_configPath, json);
+        try
+        {
+            var service = new ConfigService();
+            var config = service.Load();
+            Assert.NotNull(config);
+            Assert.Null(config.Behavior.GlobalShortcut);
+        }
+        finally
+        {
+            if (File.Exists(_configPath))
+                File.Delete(_configPath);
+        }
+    }
+
+    [Fact]
     public void ModeConfig_ShortcutHint_ReflectsParsedCombo()
     {
         var mode = new ModeConfig { Name = "A", Shortcut = "ctrl+alt+1", Index = 1 };

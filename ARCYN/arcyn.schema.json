@@ -4,6 +4,10 @@
   "description": "Configuration schema for the ARCYN tactical workspace launcher",
   "type": "object",
   "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON schema URI for self-validation"
+    },
     "theme": {
       "type": "object",
       "description": "Visual theme settings",
@@ -62,6 +66,11 @@
           "type": "boolean",
           "description": "Close ARCYN after launching a mode",
           "default": true
+        },
+        "global_shortcut": {
+          "type": "string",
+          "description": "Global keyboard shortcut to toggle the ARCYN window from anywhere. Format: modifiers joined by '+' plus a key, e.g. 'Super+Space', 'Ctrl+Alt+Space'.",
+          "pattern": "^(Ctrl|Alt|Shift|Meta|Super|cmd|win)([+](Ctrl|Alt|Shift|Meta|Super|cmd|win))*[+]([A-Za-z0-9]|F(1[0-9]|2[0-4]|[1-9])|Escape|Tab|Space|Enter|Backspace|Insert|Delete|Home|End|PageUp|PageDown|Up|Down|Left|Right)$"
         }
       }
     },

@@ -45,4 +45,7 @@ public sealed class BehaviorConfig
 
     [JsonPropertyName("close_on_launch")]
     public bool CloseOnLaunch { get; set; } = true;
+
+    [JsonPropertyName("global_shortcut")]
+    public string? GlobalShortcut { get; set; }
 }

@@ -204,3 +204,20 @@ Check the following, in order:
 ## Status Text Reports `Ignored invalid shortcut`
 
 The string in the `shortcut` field did not parse. Fix the format (see the previous section) and reload. Common mistakes are trailing `+`, reversed order, lowercase modifier names with odd casing, and unknown keys.
+
+### Global Shortcut Does Not Work
+
+If the global shortcut does not respond:
+
+1. **Confirm the `.desktop` file exists.** The wizard creates `~/.local/share/applications/ARCYN.desktop`. If missing, re-run the wizard:
+   ```bash
+   ./scripts/wizard.sh
+   ```
+2. **Confirm the DBus portal is available.** The global shortcut relies on the `org.freedesktop.portal.GlobalShortcuts` portal. Check that the portal service is running:
+   ```bash
+   busctl list | grep -i portal
+   ```
+   You should see `org.freedesktop.portal.Desktop` and `org.freedesktop.portal.GlobalShortcuts` in the output. If not, install the portal backend for your DE (`xdg-desktop-portal-gnome`, `xdg-desktop-portal-kde`, or `xdg-desktop-portal-wlr` for wlroots‑based compositors).
+3. **Stale `.desktop` file.** After re‑running the wizard the `.desktop` file is updated automatically. If you edited it by hand, make sure the `X-Gnome-Shortcuts` or `X-KDE-Shortcuts` key is set correctly.
+4. **Restart the session** after installing or updating the `.desktop` file so that your DE picks up the changes.
+5. **Check DE‑specific bindings.** See the [Global Shortcut](#global-shortcut) section in the main README for per‑desktop workarounds (GNOME manual binding, Sway/i3 config, etc.).

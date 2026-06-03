@@ -642,6 +642,39 @@ wiz_behavior() {
   fi
 }
 
+# ---------------------------------------------------------------------------
+# Global shortcut
+# ---------------------------------------------------------------------------
+wiz_global_shortcut() {
+  # In non-interactive mode, read from environment variable
+  if [[ -n "${WIZ_FORCE_NONINTERACTIVE:-}" ]]; then
+    if [[ -n "${ARCYN_GLOBAL_SHORTCUT:-}" ]]; then
+      WIZ_BEHAVIOR[shortcut]="$ARCYN_GLOBAL_SHORTCUT"
+    fi
+    return
+  fi
+
+  local hint="Optional global keyboard shortcut to toggle the ARCYN window.
+Leave blank for no global shortcut.
+
+Format: Ctrl+Alt+1, Super+Space, F5
+Modifiers: Ctrl, Alt, Shift, Meta, Super, Cmd, Win
+Keys: 0-9, A-Z, F1-F24, Escape, Tab, Space, Enter, Backspace,
+      Insert, Delete, Home, End, PageUp, PageDown, Up, Down, Left, Right"
+  local edited
+  edited=$(wiz_input "Global shortcut" "$hint" "${WIZ_BEHAVIOR[shortcut]:-}")
+
+  if [[ -n "$edited" ]] && ! [[ "$edited" =~ $WIZ_SHORTCUT_RE ]]; then
+    wiz_msg "Invalid shortcut" "'$edited' is not a valid shortcut. Please try again."
+    wiz_global_shortcut
+    return
+  fi
+
+  if [[ -n "$edited" ]]; then
+    WIZ_BEHAVIOR[shortcut]="$edited"
+  fi
+}
+
 wiz_theme() {
   if ! wiz_yesno "Theme" "Use the default ARCYN theme?\n(Yes uses bundled defaults; No lets you customize accent color and glow)"; then
     WIZ_THEME[accent]="#D64545"
@@ -758,6 +791,7 @@ wiz_build_json() {
   local b_idle="${WIZ_BEHAVIOR[idle]:-10}"
   local b_aot="${WIZ_BEHAVIOR[aot]:-true}"
   local b_col="${WIZ_BEHAVIOR[col]:-true}"
+  local b_shortcut="${WIZ_BEHAVIOR[shortcut]:-}"
 
   cat <<EOF
 {
@@ -772,7 +806,8 @@ wiz_build_json() {
   "behavior": {
     "idle_timeout_seconds": $b_idle,
     "always_on_top": $b_aot,
-    "close_on_launch": $b_col
+    "close_on_launch": $b_col$(if [[ -n "$b_shortcut" ]]; then echo ','
+    printf '    "global_shortcut": "%s"' "$(wiz_json_escape "$b_shortcut")"; fi)
   },
   "modes": [
 EOF
@@ -827,6 +862,46 @@ wiz_write_config() {
   chmod 600 "$ARCYN_CONFIG_FILE" 2>/dev/null || true
 }
 
+# ---------------------------------------------------------------------------
+# Desktop shortcut installation
+# ---------------------------------------------------------------------------
+wiz_install_shortcut() {
+  local template="$ROOT_DIR/ARCYN/Assets/arcyn.desktop.in"
+  local apps_dir="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
+  local desktop_file="$apps_dir/arcyn.desktop"
+
+  local exec_path
+  if [[ -x "$ROOT_DIR/dist/ARCYN-linux-x64/ARCYN" ]]; then
+    exec_path="$ROOT_DIR/dist/ARCYN-linux-x64/ARCYN"
+  else
+    exec_path="$ROOT_DIR/scripts/run-linux.sh"
+  fi
+
+  local icon_path="$ROOT_DIR/ARCYN/Assets/arcyn.svg"
+
+  if [[ ! -f "$template" ]]; then
+    echo "  [warn] Desktop file template not found: $template"
+    echo "  [warn] Skipping shortcut installation."
+    return 1
+  fi
+
+  mkdir -p "$apps_dir"
+
+  sed -e "s|@EXEC@|$exec_path|g" \
+      -e "s|@ICON@|$icon_path|g" \
+      "$template" > "$desktop_file"
+
+  chmod 644 "$desktop_file"
+  echo "  Installed desktop shortcut: $desktop_file"
+
+  if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database "$apps_dir" 2>/dev/null || true
+  fi
+  if command -v xdg-desktop-menu >/dev/null 2>&1; then
+    xdg-desktop-menu forceupdate 2>/dev/null || true
+  fi
+}
+
 wiz_handoff() {
   if wiz_yesno "Launch ARCYN" "Configuration saved. Launch ARCYN now?"; then
     WIZ_COMPLETED=1
@@ -848,11 +923,21 @@ arcyn_wizard_main() {
 
   if [[ -n "${WIZ_FORCE_NONINTERACTIVE:-}" ]]; then
     echo "ARCYN setup wizard skipped (no TTY or CI environment detected)."
-    if [[ ! -f "$ARCYN_CONFIG_FILE" && -f "$EXAMPLE_CONFIG" ]]; then
+    wiz_global_shortcut
+    if [[ ! -f "$ARCYN_CONFIG_FILE" ]]; then
       mkdir -p "$ARCYN_CONFIG_DIR"
-      cp "$EXAMPLE_CONFIG" "$ARCYN_CONFIG_FILE"
-      chmod 600 "$ARCYN_CONFIG_FILE" 2>/dev/null || true
-      echo "Wrote example config to: $ARCYN_CONFIG_FILE"
+      if [[ -n "${ARCYN_GLOBAL_SHORTCUT:-}" ]]; then
+        wiz_materialize_preset "CODE"
+        wiz_materialize_preset "BROWSE"
+        wiz_materialize_preset "CREATE"
+        wiz_write_config
+        wiz_install_shortcut || true
+        echo "Wrote default config to: $ARCYN_CONFIG_FILE"
+      elif [[ -f "$EXAMPLE_CONFIG" ]]; then
+        cp "$EXAMPLE_CONFIG" "$ARCYN_CONFIG_FILE"
+        chmod 600 "$ARCYN_CONFIG_FILE" 2>/dev/null || true
+        echo "Wrote example config to: $ARCYN_CONFIG_FILE"
+      fi
     else
       echo "Existing config kept: $ARCYN_CONFIG_FILE"
     fi
@@ -894,6 +979,7 @@ arcyn_wizard_main() {
   fi
 
   wiz_behavior
+  wiz_global_shortcut
   wiz_theme
   wiz_warn_missing_apps
 
@@ -903,6 +989,7 @@ arcyn_wizard_main() {
   fi
 
   wiz_write_config
+  wiz_install_shortcut || true
   wiz_handoff
   return 0
 }

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=ARCYN
+Comment=Desktop workspace launcher
+Exec=@EXEC@
+Icon=@ICON@
+Terminal=false
+Categories=Utility;
+StartupNotify=true
+DBusActivatable=true

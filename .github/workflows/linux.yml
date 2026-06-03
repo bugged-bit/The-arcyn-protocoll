@@ -27,6 +27,12 @@ jobs:
       - name: Restore
         run: dotnet restore ARCYN/ARCYN.sln
 
+      - name: Install jsonschema
+        run: pip install jsonschema
+
+      - name: Validate JSON schema
+        run: python3 -m jsonschema --instance ARCYN/example.arcyn.json ARCYN/arcyn.schema.json
+
       - name: Build
         run: dotnet build ARCYN/ARCYN.sln -c Release --no-restore -warnaserror
 
